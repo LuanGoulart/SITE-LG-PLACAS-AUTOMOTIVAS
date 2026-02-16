@@ -144,3 +144,14 @@ h2 {
     max-height: 82vh;
   }
 }
+
+/* Garante o degradê principal da hero em qualquer dispositivo */
+#home {
+  background: radial-gradient(circle at top, #2563eb 0%, #00040a 78%) !important;
+}
+
+@media (max-width: 768px) {
+  #home {
+    background: radial-gradient(circle at 50% 0%, #2563eb 0%, #00040a 82%) !important;
+  }
+}
