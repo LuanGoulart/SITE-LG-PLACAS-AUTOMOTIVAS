@@ -33,6 +33,17 @@
         backdrop-filter: blur(18px);
       }
 
+      .checkbox-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.75rem;
+      }
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
       .soft-shadow {
         box-shadow: 0 24px 80px rgba(2, 6, 23, 0.42);
       }
@@ -295,25 +306,31 @@
                 </p>
               </div>
               <form id="blockSlotForm" class="space-y-4 p-4 sm:p-5">
-                <div class="grid gap-3 sm:grid-cols-2">
+                <div class="grid gap-4">
                   <label class="space-y-2 text-sm font-semibold text-slate-200">
                     <span>Data</span>
                     <input
                       id="blockDate"
                       type="date"
-                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-sky-400/50"
+                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
                     />
                   </label>
-                  <label class="space-y-2 text-sm font-semibold text-slate-200">
-                    <span>Horário</span>
-                    <select
-                      id="blockHour"
-                      disabled
-                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-sky-400/50 disabled:cursor-not-allowed disabled:bg-slate-800"
+                  <div>
+                    <span
+                      class="mb-2 block text-sm font-semibold text-slate-200"
+                      >Horários disponíveis</span
                     >
-                      <option value="">Escolha uma data</option>
-                    </select>
-                  </label>
+                    <div
+                      id="blockHourCheckboxes"
+                      class="checkbox-grid min-h-[4rem] rounded-2xl border border-dashed border-white/10 bg-slate-950/20 p-4"
+                    >
+                      <p
+                        class="col-span-full text-center text-sm text-slate-400"
+                      >
+                        Escolha uma data para ver os horários.
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                   <button
@@ -321,7 +338,7 @@
                     type="submit"
                     class="rounded-2xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-400"
                   >
-                    Bloquear horário
+                    Bloquear horários selecionados
                   </button>
                 </div>
               </form>
@@ -638,7 +655,9 @@
 
       const blockSlotForm = document.getElementById("blockSlotForm");
       const blockDateInput = document.getElementById("blockDate");
-      const blockHourSelect = document.getElementById("blockHour");
+      const blockHourCheckboxes = document.getElementById(
+        "blockHourCheckboxes",
+      );
       const blockedSlotsList = document.getElementById("blockedSlotsList");
 
       const storedKey = localStorage.getItem(ADMIN_STORAGE_KEY) || "Lu@n1012";
@@ -1375,15 +1394,15 @@
 
       async function updateBlockableHours() {
         const dateStr = blockDateInput.value;
+        const container = blockHourCheckboxes;
         if (!dateStr) {
-          blockHourSelect.disabled = true;
-          blockHourSelect.innerHTML =
-            '<option value="">Escolha uma data</option>';
+          container.innerHTML =
+            '<p class="col-span-full text-center text-sm text-slate-400">Escolha uma data para ver os horários.</p>';
           return;
         }
 
-        blockHourSelect.disabled = true;
-        blockHourSelect.innerHTML = '<option value="">Carregando...</option>';
+        container.innerHTML =
+          '<p class="col-span-full text-center text-sm text-slate-400">Carregando...</p>';
 
         try {
           const [ocupadosSnap, bloqueadosSnap] = await Promise.all([
@@ -1410,18 +1429,24 @@
           );
 
           if (disponiveis.length > 0) {
-            blockHourSelect.innerHTML = disponiveis
-              .map((h) => `<option value="${h}">${h}</option>`)
+            container.innerHTML = disponiveis
+              .map(
+                (h) => `
+                <label class="checkbox-label cursor-pointer rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10 has-[:checked]:border-amber-400/50 has-[:checked]:bg-amber-500/15 has-[:checked]:text-amber-200">
+                  <input type="checkbox" name="horas_para_bloquear" value="${h}" class="sr-only">
+                  <span>${h}</span>
+                </label>
+              `,
+              )
               .join("");
-            blockHourSelect.disabled = false;
           } else {
-            blockHourSelect.innerHTML =
-              '<option value="">Nenhum horário livre</option>';
+            container.innerHTML =
+              '<p class="col-span-full text-center text-sm text-slate-400">Nenhum horário livre neste dia.</p>';
           }
         } catch (err) {
           console.error("Erro ao buscar horários para bloqueio:", err);
-          blockHourSelect.innerHTML =
-            '<option value="">Erro ao carregar</option>';
+          container.innerHTML =
+            '<p class="col-span-full text-center text-sm text-rose-300">Erro ao carregar horários.</p>';
         }
       }
 
@@ -1466,31 +1491,42 @@
       blockSlotForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const data = blockDateInput.value;
-        const hora = blockHourSelect.value;
+        const selectedHours = Array.from(
+          blockHourCheckboxes.querySelectorAll("input:checked"),
+        ).map((cb) => cb.value);
 
-        if (!data || !hora) {
+        if (!data || selectedHours.length === 0) {
           addToast(
             "Atenção",
-            "Selecione a data e o horário para bloquear.",
+            "Selecione a data e pelo menos um horário para bloquear.",
             "warning",
           );
           return;
         }
 
         try {
-          const docRef = await db
-            .collection("horarios_bloqueados")
-            .add({ data, hora });
-          state.blockedSlots.push({ id: docRef.id, data, hora });
+          const batch = db.batch();
+          const newBlockedSlots = [];
+
+          for (const hora of selectedHours) {
+            const docRef = db.collection("horarios_bloqueados").doc();
+            batch.set(docRef, { data, hora });
+            newBlockedSlots.push({ id: docRef.id, data, hora });
+          }
+
+          await batch.commit();
+
+          state.blockedSlots.push(...newBlockedSlots);
           renderBlockedSlots();
           updateBlockableHours(); // Refresh hours for the same day
           addToast(
             "Horário Bloqueado",
-            `O horário ${hora} do dia ${formatDate(data)} foi bloqueado.`,
+            `${selectedHours.length} horário(s) do dia ${formatDate(data)} foram bloqueados.`,
             "success",
           );
         } catch (err) {
-          addToast("Erro", "Não foi possível salvar o bloqueio.", "warning");
+          console.error("Erro ao bloquear horários:", err);
+          addToast("Erro", "Não foi possível salvar os bloqueios.", "warning");
         }
       });
 
