@@ -203,15 +203,15 @@
             </div>
 
             <div
-              class="mt-4 grid grid-cols-7 gap-2 text-center text-[11px] uppercase tracking-[0.25em] text-slate-400"
+              class="mt-4 grid grid-cols-7 gap-1 text-center text-xs font-bold uppercase text-slate-400"
             >
-              <div>Dom</div>
-              <div>Seg</div>
-              <div>Ter</div>
-              <div>Qua</div>
-              <div>Qui</div>
-              <div>Sex</div>
-              <div>Sáb</div>
+              <div>D</div>
+              <div>S</div>
+              <div>T</div>
+              <div>Q</div>
+              <div>Q</div>
+              <div>S</div>
+              <div>S</div>
             </div>
             <div id="calendarGrid" class="mt-3 grid grid-cols-7 gap-2"></div>
           </div>
@@ -440,6 +440,15 @@
       </section>
     </div>
 
+    <!-- Elemento de áudio para notificações -->
+    <audio id="notificationSound" preload="auto" class="hidden">
+      <source
+        src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjQ1LjEwMAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAAAAAACQABAAP/7gMQCgAAAAAARW5jb2RlcgAAAAgAAANMYXZjNTguOTEuMTAw//tAwJgAAAAAFZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZm//tAwLgAAAAhVTEsBAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//tAwOAAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV-"
+        ;
+        type="audio/mpeg"
+      />
+    </audio>
+
     <div
       id="toastStack"
       class="pointer-events-none fixed right-4 top-4 z-50 space-y-3"
@@ -609,12 +618,8 @@
       const editHora = document.getElementById("editHora");
       const btnLogout = document.getElementById("btnLogout");
 
-      // Máscara de Telefone no Editar
-      const audioContext = new (
-        window.AudioContext || window.webkitAudioContext
-      )();
-      let notificationSoundBuffer = null;
-      let isAudioUnlocked = false;
+      const notificationSound = document.getElementById("notificationSound");
+      let hasUserInteracted = false;
 
       editTelefone.addEventListener("input", (e) => {
         let value = e.target.value.replace(/\D/g, "");
@@ -1266,71 +1271,35 @@
         }
       }
 
-      async function loadSound() {
-        try {
-          const response = await fetch("notificacao.mp3");
-          const arrayBuffer = await response.arrayBuffer();
-          notificationSoundBuffer =
-            await audioContext.decodeAudioData(arrayBuffer);
-        } catch (error) {
-          console.error(
-            "Não foi possível carregar o som de notificação:",
-            error,
-          );
-          addToast(
-            "Aviso",
-            "Não foi possível carregar o som de notificação.",
-            "warning",
-          );
-        }
-      }
-
-      function playNotificationSound(isUnlocking = false) {
-        if (!notificationSoundBuffer) return;
-
-        // Se o contexto de áudio estiver suspenso, não podemos fazer nada até o usuário interagir.
-        if (audioContext.state === "suspended" && !isUnlocking) {
-          console.warn("Áudio suspenso. Aguardando interação do usuário.");
-          return;
-        }
-
-        // Se o contexto foi resumido, podemos tocar o som.
-        if (audioContext.state === "running") {
-          const source = audioContext.createBufferSource();
-          const gainNode = audioContext.createGain();
-
-          source.buffer = notificationSoundBuffer;
-          source.connect(gainNode);
-          gainNode.connect(audioContext.destination);
-
-          // Toca silenciosamente para desbloquear, ou com volume normal para notificar.
-          gainNode.gain.value = isUnlocking ? 0 : 1;
-          source.start(0);
-
-          if (isUnlocking) {
-            console.log("Contexto de áudio desbloqueado com sucesso.");
-          }
+      function playNotificationSound() {
+        if (hasUserInteracted && notificationSound) {
+          notificationSound.play().catch((e) => {
+            console.error("Erro ao tocar som de notificação:", e);
+          });
         }
       }
 
       // Desbloqueia o áudio no primeiro clique do usuário
       function unlockAudio() {
-        if (
-          isAudioUnlocked ||
-          !audioContext ||
-          audioContext.state !== "suspended"
-        )
-          return;
+        if (hasUserInteracted || !notificationSound) return;
 
-        audioContext
-          .resume()
-          .then(() => {
-            isAudioUnlocked = true;
-            playNotificationSound(true); // Toca um som silencioso para "aquecer" o motor de áudio.
-          })
-          .catch((e) =>
-            console.error("Erro ao resumir o contexto de áudio:", e),
-          );
+        // A primeira chamada a .play() deve ser iniciada pelo usuário.
+        // O navegador pode bloquear isso, mas a intenção do usuário é registrada.
+        const promise = notificationSound.play();
+        if (promise !== undefined) {
+          promise
+            .then(() => {
+              hasUserInteracted = true;
+              console.log("Áudio desbloqueado pelo usuário.");
+            })
+            .catch(() => {
+              // O erro é esperado se o navegador bloquear, mas a interação já conta.
+              hasUserInteracted = true;
+              console.log(
+                "Interação do usuário registrada. Áudio liberado para futuras notificações.",
+              );
+            });
+        }
       }
 
       async function unlockAdmin() {
@@ -1707,7 +1676,6 @@
       }, 60000);
 
       if (state.adminKey) {
-        loadSound();
         loadAdminData();
       }
     </script>
