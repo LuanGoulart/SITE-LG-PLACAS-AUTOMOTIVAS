@@ -1087,7 +1087,7 @@
                       ? `<span class="rounded-full bg-emerald-500/20 px-2 py-1 text-[11px] font-bold text-emerald-300">${count}</span>`
                       : '<span class="text-[11px] text-sky-400/60 font-bold">livre</span>'
                 }
-              </div><div class="mt-2 text-[10px] uppercase tracking-wider font-semibold ${closedReason ? "text-rose-400/70" : count > 0 ? "text-emerald-400/70" : "text-sky-400/70"}">${closedReason ? closedReason.replaceAll("_", " ") : count > 0 ? "ocupado" : "livre"}</div>
+              </div><div class="mt-2 text-[9px] uppercase tracking-normal font-bold ${closedReason ? "text-rose-400/70" : count > 0 ? "text-emerald-400/70" : "text-sky-400/70"}">${closedReason ? closedReason.replaceAll("_", " ") : count > 0 ? "ocupado" : "livre"}</div>
             </button>
           `);
         }
