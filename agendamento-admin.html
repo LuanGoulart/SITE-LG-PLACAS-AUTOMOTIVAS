@@ -1372,7 +1372,7 @@
         );
         state.calendar.year = current.getFullYear();
         state.calendar.month = current.getMonth();
-        loadAdminData();
+        renderCalendar(); // Apenas redesenha o calendário, não recarrega tudo
       }
 
       function goToday() {
@@ -1380,7 +1380,7 @@
         state.calendar.year = today.getFullYear();
         state.calendar.month = today.getMonth();
         state.calendar.selectedDate = getLocalISODate(today);
-        loadAdminData();
+        renderCalendar(); // Apenas redesenha o calendário
       }
 
       function renderPins() {
