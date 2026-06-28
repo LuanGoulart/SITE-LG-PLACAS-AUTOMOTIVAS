@@ -610,6 +610,12 @@
       const btnLogout = document.getElementById("btnLogout");
 
       // Máscara de Telefone no Editar
+      const audioContext = new (
+        window.AudioContext || window.webkitAudioContext
+      )();
+      let notificationSoundBuffer = null;
+      let isAudioUnlocked = false;
+
       editTelefone.addEventListener("input", (e) => {
         let value = e.target.value.replace(/\D/g, "");
         if (value.length > 11) value = value.slice(0, 11);
@@ -778,10 +784,18 @@
           ).length,
         );
 
-        appointmentsBody.innerHTML = state.appointments
-          .map(
-            (item) => `
-            <tr class="hover:bg-white/5">
+        const now = new Date();
+        const sortedAppointments = [...state.appointments].sort((a, b) => {
+          const dateA = `${a.data}T${a.hora}`;
+          const dateB = `${b.data}T${b.hora}`;
+          return dateB.localeCompare(dateA);
+        });
+
+        appointmentsBody.innerHTML = sortedAppointments
+          .map((item) => {
+            const isPast = new Date(`${item.data}T${item.hora}:00`) < now;
+            return `
+            <tr class="hover:bg-white/5 transition-opacity ${isPast ? "opacity-50 line-through" : ""}">
               <td class="px-4 py-3 text-slate-200">${escapeHtml(formatDate(item.data))}</td>
               <td class="px-4 py-3 font-semibold text-white">${escapeHtml(item.hora)}</td>
               <td class="px-4 py-3 text-slate-200">${escapeHtml(item.clienteNome)}</td>
@@ -795,8 +809,8 @@
                 </div>
               </td>
             </tr>
-          `,
-          )
+          `;
+          })
           .join("");
 
         emptyAppointments.classList.toggle(
@@ -851,12 +865,15 @@
         selectedDayLabel.textContent = `Dia selecionado: ${formatDate(state.calendar.selectedDate)}`;
         agendamentosDia.textContent = String(items.length);
 
+        const now = new Date();
+
         selectedDayList.innerHTML = items
-          .map(
-            (item) => `
-            <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
+          .map((item) => {
+            const isPast = new Date(`${item.data}T${item.hora}:00`) < now;
+            return `
+            <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4 transition-opacity ${isPast ? "opacity-50" : ""}">
               <div class="flex items-start justify-between gap-3">
-                <div>
+                <div class="${isPast ? "line-through" : ""}">
                   <p class="text-base font-bold text-white">${escapeHtml(item.clienteNome)}</p>
                   <p class="mt-1 text-sm text-slate-300">${escapeHtml(item.placa)} - ${escapeHtml(item.clienteTelefone)}</p>
                 </div>
@@ -869,8 +886,8 @@
                 </div>
               </div>
             </div>
-          `,
-          )
+          `;
+          })
           .join("");
 
         emptySelectedDay.classList.toggle("hidden", items.length > 0);
@@ -1169,11 +1186,47 @@
           db.collection("notificacoes")
             .orderBy("createdAt", "desc")
             .limit(50)
-            .onSnapshot((snap) => {
-              state.notifications = snap.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-              }));
+            .onSnapshot((snapshot) => {
+              const initialLoad = state.notifications.length === 0;
+
+              snapshot.docChanges().forEach((change) => {
+                if (change.type === "added") {
+                  const newNotification = {
+                    id: change.doc.id,
+                    ...change.doc.data(),
+                  };
+                  // Evita notificar e tocar som na carga inicial da página
+                  if (!initialLoad) {
+                    // Adiciona a notificação no topo da lista
+                    state.notifications.unshift(newNotification);
+                    playNotificationSound();
+                    addToast(
+                      newNotification.titulo || "Nova notificação",
+                      newNotification.mensagem ||
+                        "Você tem uma nova atividade.",
+                      "success",
+                    );
+                  }
+                } else if (change.type === "modified") {
+                  const updatedNotification = {
+                    id: change.doc.id,
+                    ...change.doc.data(),
+                  };
+                  const index = state.notifications.findIndex(
+                    (n) => n.id === change.doc.id,
+                  );
+                  if (index > -1)
+                    state.notifications[index] = updatedNotification;
+                }
+              });
+
+              // Na carga inicial, preenche o estado com todos os docs
+              if (initialLoad) {
+                state.notifications = snapshot.docs.map((doc) => ({
+                  id: doc.id,
+                  ...doc.data(),
+                }));
+              }
               renderNotifications();
             });
 
@@ -1211,6 +1264,73 @@
             "warning",
           );
         }
+      }
+
+      async function loadSound() {
+        try {
+          const response = await fetch("notificacao.mp3");
+          const arrayBuffer = await response.arrayBuffer();
+          notificationSoundBuffer =
+            await audioContext.decodeAudioData(arrayBuffer);
+        } catch (error) {
+          console.error(
+            "Não foi possível carregar o som de notificação:",
+            error,
+          );
+          addToast(
+            "Aviso",
+            "Não foi possível carregar o som de notificação.",
+            "warning",
+          );
+        }
+      }
+
+      function playNotificationSound(isUnlocking = false) {
+        if (!notificationSoundBuffer) return;
+
+        // Se o contexto de áudio estiver suspenso, não podemos fazer nada até o usuário interagir.
+        if (audioContext.state === "suspended" && !isUnlocking) {
+          console.warn("Áudio suspenso. Aguardando interação do usuário.");
+          return;
+        }
+
+        // Se o contexto foi resumido, podemos tocar o som.
+        if (audioContext.state === "running") {
+          const source = audioContext.createBufferSource();
+          const gainNode = audioContext.createGain();
+
+          source.buffer = notificationSoundBuffer;
+          source.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          // Toca silenciosamente para desbloquear, ou com volume normal para notificar.
+          gainNode.gain.value = isUnlocking ? 0 : 1;
+          source.start(0);
+
+          if (isUnlocking) {
+            console.log("Contexto de áudio desbloqueado com sucesso.");
+          }
+        }
+      }
+
+      // Desbloqueia o áudio no primeiro clique do usuário
+      function unlockAudio() {
+        if (
+          isAudioUnlocked ||
+          !audioContext ||
+          audioContext.state !== "suspended"
+        )
+          return;
+
+        audioContext
+          .resume()
+          .then(() => {
+            isAudioUnlocked = true;
+            playNotificationSound(true); // Toca um som silencioso para "aquecer" o motor de áudio.
+          })
+          .catch((e) =>
+            console.error("Erro ao resumir o contexto de áudio:", e),
+          );
       }
 
       async function unlockAdmin() {
@@ -1451,23 +1571,50 @@
       }
 
       function renderBlockedSlots() {
-        const sorted = [...state.blockedSlots].sort((a, b) => {
-          const dateComp = String(b.data).localeCompare(a.data);
-          if (dateComp !== 0) return dateComp;
-          return String(b.hora).localeCompare(a.hora);
+        const now = new Date();
+        const currentBlockedSlots = state.blockedSlots.filter((slot) => {
+          const slotDateTime = new Date(`${slot.data}T${slot.hora}:00`);
+          return slotDateTime >= now;
         });
 
-        blockedSlotsList.innerHTML = sorted
-          .map(
-            (slot) => `
-          <div class="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/20 p-3">
-            <div>
-              <p class="font-semibold text-white">${formatDate(slot.data)} às ${slot.hora}</p>
-            </div>
-            <button type="button" onclick="deleteBlockedSlot('${slot.id}')" class="text-xs font-semibold text-rose-400 hover:text-rose-300">Remover</button>
-          </div>
-        `,
-          )
+        const groupedByDate = currentBlockedSlots.reduce((acc, slot) => {
+          if (!acc[slot.data]) {
+            acc[slot.data] = [];
+          }
+          acc[slot.data].push(slot);
+          return acc;
+        }, {});
+
+        const sortedDates = Object.keys(groupedByDate).sort().reverse();
+
+        if (sortedDates.length === 0) {
+          blockedSlotsList.innerHTML =
+            '<p class="text-center text-sm text-slate-400">Nenhum horário bloqueado.</p>';
+          return;
+        }
+
+        blockedSlotsList.innerHTML = sortedDates
+          .map((date) => {
+            const slots = groupedByDate[date].sort((a, b) =>
+              a.hora.localeCompare(b.hora),
+            );
+            return `
+            <div class="space-y-2">
+              <p class="text-sm font-bold text-slate-200">${formatDate(date)}</p>
+              <div class="checkbox-grid">
+                ${slots
+                  .map(
+                    (slot) => `
+                  <div class="group relative flex cursor-pointer items-center justify-center rounded-xl border border-amber-400/30 bg-amber-500/15 px-3 py-2 text-sm font-semibold text-amber-200">
+                    <span>${slot.hora}</span>
+                    <button onclick="deleteBlockedSlot('${slot.id}')" class="absolute inset-0 flex items-center justify-center rounded-xl bg-rose-500/80 text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100">Remover</button>
+                  </div>
+                `,
+                  )
+                  .join("")}
+              </div>
+            </div>`;
+          })
           .join("");
       }
 
@@ -1545,10 +1692,22 @@
       editModal.addEventListener("click", (event) => {
         if (event.target === editModal) closeEditModal();
       });
+      // Event listener para desbloquear o áudio
+      document.body.addEventListener("click", unlockAudio, { once: true });
+
       btnLogout.addEventListener("click", logout);
 
       renderGate();
+
+      // Atualiza a UI para marcar agendamentos passados a cada minuto
+      setInterval(() => {
+        renderAppointments();
+        renderSelectedDay();
+        renderBlockedSlots();
+      }, 60000);
+
       if (state.adminKey) {
+        loadSound();
         loadAdminData();
       }
     </script>
