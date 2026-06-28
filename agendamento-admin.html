@@ -45,7 +45,7 @@
     </style>
   </head>
   <body class="min-h-screen text-slate-100">
-    <div class="mx-auto w-full max-w-[96rem] px-3 py-6 sm:px-4 lg:px-5">
+    <div class="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <div
         class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
       >
@@ -97,8 +97,7 @@
         <div class="mt-5 flex flex-col gap-3 sm:flex-row">
           <input
             id="adminKeyInput"
-            type="password"
-            inputmode="numeric"
+            type="text"
             placeholder="Digite o PIN"
             class="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
           />
@@ -284,6 +283,50 @@
               </form>
               <div
                 id="holidayList"
+                class="space-y-3 border-t border-white/10 p-4 sm:p-5"
+              ></div>
+            </div>
+
+            <div class="glass soft-shadow rounded-3xl">
+              <div class="border-b border-white/10 px-4 py-4 sm:px-5">
+                <h3 class="text-lg font-semibold">Bloquear horários</h3>
+                <p class="mt-1 text-sm text-slate-400">
+                  Selecione horários para ficarem indisponíveis.
+                </p>
+              </div>
+              <form id="blockSlotForm" class="space-y-4 p-4 sm:p-5">
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <label class="space-y-2 text-sm font-semibold text-slate-200">
+                    <span>Data</span>
+                    <input
+                      id="blockDate"
+                      type="date"
+                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-sky-400/50"
+                    />
+                  </label>
+                  <label class="space-y-2 text-sm font-semibold text-slate-200">
+                    <span>Horário</span>
+                    <select
+                      id="blockHour"
+                      disabled
+                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-sky-400/50 disabled:cursor-not-allowed disabled:bg-slate-800"
+                    >
+                      <option value="">Escolha uma data</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <button
+                    id="btnAddBlock"
+                    type="submit"
+                    class="rounded-2xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-400"
+                  >
+                    Bloquear horário
+                  </button>
+                </div>
+              </form>
+              <div
+                id="blockedSlotsList"
                 class="space-y-3 border-t border-white/10 p-4 sm:p-5"
               ></div>
             </div>
@@ -514,14 +557,12 @@
 
     <script>
       const firebaseConfig = {
-        apiKey: "AIzaSyAT47ETWKHfHGya_rk76YrRqBPO7aI3N0Y",
+        apiKey: "AIzaSy...seu_valor_real",
         authDomain: "instagramapp-34791.firebaseapp.com",
-        databaseURL: "https://instagramapp-34791-default-rtdb.firebaseio.com",
         projectId: "instagramapp-34791",
         storageBucket: "instagramapp-34791.appspot.com",
-        messagingSenderId: "749418759280",
-        appId: "1:749418759280:web:758c036737c686152f20b5",
-        measurementId: "G-5FDLV6V8RR",
+        messagingSenderId: "123456789012",
+        appId: "1:123456789012:web:abcdef123456",
       };
 
       firebase.initializeApp(firebaseConfig);
@@ -595,7 +636,12 @@
       const btnCancelPinEdit = document.getElementById("btnCancelPinEdit");
       const pinList = document.getElementById("pinList");
 
-      const storedKey = localStorage.getItem(ADMIN_STORAGE_KEY) || "";
+      const blockSlotForm = document.getElementById("blockSlotForm");
+      const blockDateInput = document.getElementById("blockDate");
+      const blockHourSelect = document.getElementById("blockHour");
+      const blockedSlotsList = document.getElementById("blockedSlotsList");
+
+      const storedKey = localStorage.getItem(ADMIN_STORAGE_KEY) || "Lu@n1012";
       const todayIso = getLocalISODate(new Date());
 
       const state = {
@@ -606,6 +652,7 @@
         adminKey: storedKey,
         editing: null,
         holidays: [],
+        blockedSlots: [],
         pins: [],
         closedByDate: {},
         calendar: {
@@ -614,6 +661,21 @@
           selectedDate: todayIso,
         },
       };
+
+      // Lógica de horários (Antigo CONFIG do server.js)
+      const CONFIG = { inicio: 9, fim: 17, almoco: 12, intervalo: 30 };
+      function buildSlots() {
+        const slots = [];
+        for (let h = CONFIG.inicio; h < CONFIG.fim; h++) {
+          if (h === CONFIG.almoco) continue;
+          for (let m = 0; m < 60; m += CONFIG.intervalo) {
+            slots.push(
+              `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`,
+            );
+          }
+        }
+        return slots;
+      }
 
       function getLocalISODate(date = new Date()) {
         return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -1101,6 +1163,12 @@
           feriados.forEach(
             (doc) => (state.closedByDate[doc.id] = doc.data().descricao),
           );
+          const blocked = await db.collection("horarios_bloqueados").get();
+          state.blockedSlots = blocked.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          renderBlockedSlots();
 
           const pins = await db.collection("pins").get();
           state.pins = pins.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -1126,17 +1194,37 @@
         }
       }
 
-      function unlockAdmin() {
+      async function unlockAdmin() {
         const key = adminKeyInput.value.trim();
         if (!key) {
           adminGateFeedback.textContent = "Digite o PIN para continuar.";
           return;
         }
 
-        state.adminKey = key;
-        localStorage.setItem(ADMIN_STORAGE_KEY, key);
-        renderGate();
-        loadAdminData();
+        adminGateFeedback.textContent = "Verificando...";
+        btnUnlockAdmin.disabled = true;
+
+        try {
+          const snap = await db
+            .collection("pins")
+            .where("valor", "==", key)
+            .get();
+
+          if (snap.empty) {
+            throw new Error("PIN inválido ou não encontrado.");
+          }
+
+          // PIN é válido
+          state.adminKey = key;
+          localStorage.setItem(ADMIN_STORAGE_KEY, key);
+          renderGate();
+          await loadAdminData();
+          adminGateFeedback.textContent = "";
+        } catch (error) {
+          adminGateFeedback.textContent = "PIN inválido. Tente novamente.";
+        } finally {
+          btnUnlockAdmin.disabled = false;
+        }
       }
 
       async function markAllAsRead() {
@@ -1235,16 +1323,13 @@
       window.deletePin = async function (id) {
         if (!confirm("Deseja remover este PIN?")) return;
         try {
-          const res = await adminFetch(`/pins/${id}`, { method: "DELETE" });
-          if (!res.ok) {
-            const data = await res.json();
-            throw new Error(data.error || "Erro ao remover");
-          }
+          await db.collection("pins").doc(id).delete();
           state.pins = state.pins.filter((p) => p.id !== id);
           renderPins();
           addToast("PIN Removido", "O acesso foi revogado.", "success");
         } catch (err) {
-          addToast("Erro", err.message, "warning");
+          console.error("Erro ao remover PIN:", err);
+          addToast("Erro", "Não foi possível remover o PIN.", "warning");
         }
       };
 
@@ -1256,38 +1341,160 @@
         if (!valor) return;
 
         try {
-          const method = id ? "PUT" : "POST";
-          const url = id ? `/pins/${id}` : "/pins";
-          const res = await adminFetch(url, {
-            method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ valor, descricao }),
-          });
-
-          if (!res.ok) {
-            const data = await res.json();
-            throw new Error(data.error || "Erro ao salvar PIN");
-          }
-
-          const saved = await res.json();
           if (id) {
-            state.pins = state.pins.map((p) => (p.id === id ? saved : p));
+            await db.collection("pins").doc(id).update({ valor, descricao });
+            state.pins = state.pins.map((p) =>
+              p.id === id ? { id, valor, descricao } : p,
+            );
             addToast("PIN Atualizado", "A chave foi alterada.", "success");
           } else {
-            state.pins = [saved, ...state.pins];
+            const docRef = await db
+              .collection("pins")
+              .add({ valor, descricao });
+            state.pins.unshift({ id: docRef.id, valor, descricao });
             addToast("PIN Criado", "Novo acesso configurado.", "success");
           }
 
           clearPinForm();
           renderPins();
         } catch (err) {
-          addToast("Erro", err.message, "warning");
+          console.error("Erro ao salvar PIN:", err);
+          addToast(
+            "Erro",
+            "Não foi possível salvar o PIN. Verifique o console para mais detalhes.",
+            "warning",
+          );
         }
       });
 
       btnCancelPinEdit.addEventListener("click", clearPinForm);
 
       btnUnlockAdmin.addEventListener("click", unlockAdmin);
+
+      // --- Lógica de Bloqueio de Horários ---
+
+      async function updateBlockableHours() {
+        const dateStr = blockDateInput.value;
+        if (!dateStr) {
+          blockHourSelect.disabled = true;
+          blockHourSelect.innerHTML =
+            '<option value="">Escolha uma data</option>';
+          return;
+        }
+
+        blockHourSelect.disabled = true;
+        blockHourSelect.innerHTML = '<option value="">Carregando...</option>';
+
+        try {
+          const [ocupadosSnap, bloqueadosSnap] = await Promise.all([
+            db
+              .collection("agendamento instalação placas")
+              .where("data", "==", dateStr)
+              .get(),
+            db
+              .collection("horarios_bloqueados")
+              .where("data", "==", dateStr)
+              .get(),
+          ]);
+
+          const ocupados = new Set(
+            ocupadosSnap.docs.map((doc) => doc.data().hora),
+          );
+          const bloqueados = new Set(
+            bloqueadosSnap.docs.map((doc) => doc.data().hora),
+          );
+
+          const allSlots = buildSlots();
+          const disponiveis = allSlots.filter(
+            (slot) => !ocupados.has(slot) && !bloqueados.has(slot),
+          );
+
+          if (disponiveis.length > 0) {
+            blockHourSelect.innerHTML = disponiveis
+              .map((h) => `<option value="${h}">${h}</option>`)
+              .join("");
+            blockHourSelect.disabled = false;
+          } else {
+            blockHourSelect.innerHTML =
+              '<option value="">Nenhum horário livre</option>';
+          }
+        } catch (err) {
+          console.error("Erro ao buscar horários para bloqueio:", err);
+          blockHourSelect.innerHTML =
+            '<option value="">Erro ao carregar</option>';
+        }
+      }
+
+      function renderBlockedSlots() {
+        const sorted = [...state.blockedSlots].sort((a, b) => {
+          const dateComp = String(b.data).localeCompare(a.data);
+          if (dateComp !== 0) return dateComp;
+          return String(b.hora).localeCompare(a.hora);
+        });
+
+        blockedSlotsList.innerHTML = sorted
+          .map(
+            (slot) => `
+          <div class="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/20 p-3">
+            <div>
+              <p class="font-semibold text-white">${formatDate(slot.data)} às ${slot.hora}</p>
+            </div>
+            <button type="button" onclick="deleteBlockedSlot('${slot.id}')" class="text-xs font-semibold text-rose-400 hover:text-rose-300">Remover</button>
+          </div>
+        `,
+          )
+          .join("");
+      }
+
+      window.deleteBlockedSlot = async function (id) {
+        if (!confirm("Deseja desbloquear este horário?")) return;
+        try {
+          await db.collection("horarios_bloqueados").doc(id).delete();
+          state.blockedSlots = state.blockedSlots.filter((s) => s.id !== id);
+          renderBlockedSlots();
+          updateBlockableHours();
+          addToast(
+            "Horário Desbloqueado",
+            "O horário agora está disponível para agendamento.",
+            "success",
+          );
+        } catch (err) {
+          addToast("Erro", "Não foi possível remover o bloqueio.", "warning");
+        }
+      };
+
+      blockSlotForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = blockDateInput.value;
+        const hora = blockHourSelect.value;
+
+        if (!data || !hora) {
+          addToast(
+            "Atenção",
+            "Selecione a data e o horário para bloquear.",
+            "warning",
+          );
+          return;
+        }
+
+        try {
+          const docRef = await db
+            .collection("horarios_bloqueados")
+            .add({ data, hora });
+          state.blockedSlots.push({ id: docRef.id, data, hora });
+          renderBlockedSlots();
+          updateBlockableHours(); // Refresh hours for the same day
+          addToast(
+            "Horário Bloqueado",
+            `O horário ${hora} do dia ${formatDate(data)} foi bloqueado.`,
+            "success",
+          );
+        } catch (err) {
+          addToast("Erro", "Não foi possível salvar o bloqueio.", "warning");
+        }
+      });
+
+      blockDateInput.addEventListener("change", updateBlockableHours);
       adminKeyInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") unlockAdmin();
       });
