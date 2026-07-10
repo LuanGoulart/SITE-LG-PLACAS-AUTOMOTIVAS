@@ -1043,6 +1043,7 @@
         for (let i = 0; i < 42; i += 1) {
           const dayNumber = i - firstDay + 1;
           if (dayNumber < 1 || dayNumber > totalDays) {
+            // Células vazias
             cells.push(
               '<div class="min-h-[4.75rem] rounded-2xl border border-dashed border-white/5 bg-white/0 p-3"></div>',
             );
