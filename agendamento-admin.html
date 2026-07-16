@@ -6,31 +6,13 @@
     <title>LG PLACAS - Painel Administrativo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      :root {
-        --panel: rgba(15, 23, 42, 0.72);
-        --line: rgba(148, 163, 184, 0.18);
-      }
-
       body {
-        background:
-          radial-gradient(
-            circle at top left,
-            rgba(16, 185, 129, 0.16),
-            transparent 28%
-          ),
-          radial-gradient(
-            circle at top right,
-            rgba(59, 130, 246, 0.18),
-            transparent 30%
-          ),
-          linear-gradient(180deg, #020617 0%, #0f172a 45%, #111827 100%);
+        background-color: #f1f5f9; /* slate-100 */
       }
 
       .glass {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        -webkit-backdrop-filter: blur(18px);
-        backdrop-filter: blur(18px);
+        background: #ffffff;
+        border: 1px solid #e2e8f0; /* slate-200 */
       }
 
       .checkbox-grid {
@@ -45,7 +27,7 @@
       }
 
       .soft-shadow {
-        box-shadow: 0 24px 80px rgba(2, 6, 23, 0.42);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
       }
 
       .tab-active {
@@ -55,39 +37,39 @@
       }
     </style>
   </head>
-  <body class="min-h-screen text-slate-100">
+  <body class="min-h-screen text-slate-800 bg-slate-100">
     <div class="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <div
-        class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+        class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
       >
         <div>
           <p
-            class="mb-2 text-xs uppercase tracking-[0.45em] text-emerald-300/80"
+            class="mb-2 text-xs uppercase tracking-[0.45em] text-emerald-600/80"
           >
             LG PLACAS
           </p>
-          <h1 class="text-3xl font-black tracking-tight sm:text-4xl">
+          <h1 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
             Painel administrativo
           </h1>
-          <p class="mt-2 max-w-2xl text-sm text-slate-300">
+          <p class="mt-2 max-w-2xl text-sm text-slate-600">
             Visualize o calendário, os agendamentos do dia e as notificações
             recebidas.
           </p>
         </div>
-        <div class="glass soft-shadow flex items-center gap-2 rounded-2xl p-2">
+        <div class="flex items-center gap-2 rounded-2xl bg-slate-200 p-1.5">
           <a
             href="javascript:void(0)"
             id="btnLogout"
-            class="hidden rounded-xl border border-rose-400/20 px-4 py-2 text-sm font-semibold text-rose-300 transition hover:bg-rose-400/10"
+            class="hidden rounded-xl border border-rose-500/20 px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-500/10"
             >Sair</a
           >
           <a
             href="/"
-            class="rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-slate-300 transition hover:text-white"
+            class="rounded-xl px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white/60 hover:text-slate-800"
             >Área do cliente</a
           >
           <span
-            class="tab-active rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold transition"
+            class="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-blue-600 shadow-sm transition"
             >Painel administrativo</span
           >
         </div>
@@ -97,11 +79,11 @@
         id="adminGate"
         class="glass soft-shadow mx-auto max-w-2xl rounded-3xl p-6 sm:p-8"
       >
-        <p class="text-xs uppercase tracking-[0.35em] text-emerald-300/80">
+        <p class="text-xs uppercase tracking-[0.35em] text-emerald-600/80">
           Acesso restrito
         </p>
-        <h2 class="mt-2 text-2xl font-bold">Seu painel privado</h2>
-        <p class="mt-2 text-sm text-slate-300">
+        <h2 class="mt-2 text-2xl font-bold text-slate-900">Seu painel privado</h2>
+        <p class="mt-2 text-sm text-slate-600">
           Digite o PIN para abrir seu calendário e ver todos os agendamentos em
           um só lugar.
         </p>
@@ -110,7 +92,7 @@
             id="adminKeyInput"
             type="text"
             placeholder="Digite o PIN"
-            class="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
+            class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
           <button
             id="btnUnlockAdmin"
@@ -120,46 +102,46 @@
             Entrar
           </button>
         </div>
-        <p id="adminGateFeedback" class="mt-3 text-sm text-slate-400"></p>
+        <p id="adminGateFeedback" class="mt-3 text-sm text-slate-500"></p>
       </section>
 
       <section id="adminPanel" class="hidden">
         <div class="grid gap-4 sm:grid-cols-3">
-          <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
-            <p class="text-xs uppercase tracking-[0.28em] text-slate-400">
+          <div class="rounded-2xl border border-slate-200 bg-white p-4">
+            <p class="text-xs uppercase tracking-[0.28em] text-slate-500">
               Total
             </p>
-            <p id="totalAgendamentos" class="mt-2 text-3xl font-black">0</p>
-            <p class="mt-1 text-sm text-slate-400">Agendamentos cadastrados</p>
+            <p id="totalAgendamentos" class="mt-1 text-2xl font-black text-slate-900">0</p>
+            <p class="mt-1 text-sm text-slate-500">Agendamentos cadastrados</p>
           </div>
-          <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
-            <p class="text-xs uppercase tracking-[0.28em] text-slate-400">
+          <div class="rounded-2xl border border-slate-200 bg-white p-4">
+            <p class="text-xs uppercase tracking-[0.28em] text-slate-500">
               Selecionado
             </p>
-            <p id="agendamentosDia" class="mt-2 text-3xl font-black">0</p>
-            <p class="mt-1 text-sm text-slate-400">
+            <p id="agendamentosDia" class="mt-1 text-2xl font-black text-slate-900">0</p>
+            <p class="mt-1 text-sm text-slate-500">
               Agendamentos do dia clicado
             </p>
           </div>
-          <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
-            <p class="text-xs uppercase tracking-[0.28em] text-slate-400">
+          <div class="rounded-2xl border border-slate-200 bg-white p-4">
+            <p class="text-xs uppercase tracking-[0.28em] text-slate-500">
               Alertas
             </p>
-            <p id="notificacoesNaoLidas" class="mt-2 text-3xl font-black">0</p>
-            <p class="mt-1 text-sm text-slate-400">Notificações não lidas</p>
+            <p id="notificacoesNaoLidas" class="mt-1 text-2xl font-black text-slate-900">0</p>
+            <p class="mt-1 text-sm text-slate-500">Notificações não lidas</p>
           </div>
         </div>
 
-        <div class="mt-6 grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+        <div class="mt-8 grid gap-6 xl:grid-cols-2">
           <div class="glass soft-shadow rounded-3xl p-4 sm:p-5">
             <div
-              class="flex flex-col gap-3 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between"
+              class="flex flex-col gap-3 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
-                <h3 id="calendarLabel" class="text-lg font-semibold">
+                <h3 id="calendarLabel" class="text-lg font-semibold text-slate-900">
                   Calendário
                 </h3>
-                <p class="mt-1 text-sm text-slate-400">
+                <p class="mt-1 text-sm text-slate-500">
                   Clique em um dia para ver os detalhes.
                 </p>
               </div>
@@ -167,35 +149,35 @@
                 <button
                   id="btnToday"
                   type="button"
-                  class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                  class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                 >
                   Hoje
                 </button>
                 <button
                   id="btnPrevMonth"
                   type="button"
-                  class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                  class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                 >
                   Mês anterior
                 </button>
                 <button
                   id="btnNextMonth"
                   type="button"
-                  class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                  class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                 >
                   Próximo mês
                 </button>
                 <button
                   id="btnRefreshAdmin"
                   type="button"
-                  class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                  class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                 >
                   Atualizar
                 </button>
                 <button
                   id="btnMarkRead"
                   type="button"
-                  class="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-400/15"
+                  class="rounded-xl border border-emerald-500/30 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
                 >
                   Marcar lidas
                 </button>
@@ -203,7 +185,7 @@
             </div>
 
             <div
-              class="mt-4 grid grid-cols-7 gap-1 text-center text-xs font-bold uppercase text-slate-400"
+              class="mt-4 grid grid-cols-7 gap-1 text-center text-xs font-bold uppercase text-slate-500"
             >
               <div>D</div>
               <div>S</div>
@@ -216,66 +198,103 @@
             <div id="calendarGrid" class="mt-3 grid grid-cols-7 gap-2"></div>
           </div>
 
-          <div class="space-y-5">
+          <div class="space-y-6">
             <div class="glass soft-shadow rounded-3xl">
-              <div class="border-b border-white/10 px-4 py-4 sm:px-5">
-                <h3 class="text-lg font-semibold">Detalhes do dia</h3>
-                <p id="selectedDayLabel" class="mt-1 text-sm text-slate-400">
+              <div class="border-b border-slate-200 px-4 py-4 sm:px-5">
+                <h3 class="text-lg font-semibold text-slate-900">Detalhes do dia</h3>
+                <p id="selectedDayLabel" class="mt-1 text-sm text-slate-500">
                   Selecione um dia no calendário.
                 </p>
               </div>
               <div id="selectedDayList" class="space-y-3 p-4 sm:p-5"></div>
               <div
                 id="emptySelectedDay"
-                class="hidden px-5 py-10 text-center text-slate-400"
+                class="hidden px-5 py-10 text-center text-slate-500"
               >
                 Nenhum agendamento neste dia.
-              </div>
+              </p>
             </div>
-
+          </div>
+        </div>
+        <div class="mt-8 grid gap-6">
+          <div class="glass soft-shadow rounded-3xl">
+            <div class="border-b border-slate-200 px-4 py-4 sm:px-5">
+              <h3 class="text-lg font-semibold text-slate-900">Todos os agendamentos</h3>
+              <p class="mt-1 text-sm text-slate-500">
+                Atualizado automaticamente quando um cliente agenda.
+              </p>
+            </div>
+            <div class="overflow-x-auto">
+              <table
+                class="min-w-full divide-y divide-slate-200 text-left text-sm"
+              >
+                <thead class="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th class="px-4 py-3 font-semibold">Data</th>
+                    <th class="px-4 py-3 font-semibold">Hora</th>
+                    <th class="px-4 py-3 font-semibold">Cliente</th>
+                    <th class="px-4 py-3 font-semibold">Telefone</th>
+                    <th class="px-4 py-3 font-semibold">Placa</th>
+                    <th class="px-4 py-3 font-semibold">Status</th>
+                    <th class="px-4 py-3 font-semibold">Ações</th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="appointmentsBody"
+                  class="divide-y divide-slate-200"
+                ></tbody>
+              </table>
+            </div>
+            <div
+              id="emptyAppointments"
+              class="hidden px-5 py-10 text-center text-slate-500"
+            >
+              Nenhum agendamento encontrado.
+            </div>
+          </div>
+          <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             <div class="glass soft-shadow rounded-3xl">
-              <div class="border-b border-white/10 px-4 py-4 sm:px-5">
-                <h3 class="text-lg font-semibold">Notificações</h3>
-                <p class="mt-1 text-sm text-slate-400">
+              <div class="border-b border-slate-200 px-4 py-4 sm:px-5">
+                <h3 class="text-lg font-semibold text-slate-900">Notificações</h3>
+                <p class="mt-1 text-sm text-slate-500">
                   Recebidas em tempo real.
                 </p>
               </div>
               <div
                 id="notificationsList"
-                class="max-h-[26rem] space-y-3 overflow-y-auto p-4 sm:p-5"
+                class="max-h-[24rem] space-y-3 overflow-y-auto p-4 sm:p-5"
               ></div>
               <div
                 id="emptyNotifications"
-                class="hidden px-5 py-10 text-center text-slate-400"
+                class="hidden px-5 py-10 text-center text-slate-500"
               >
                 Nenhuma notificação por enquanto.
               </div>
             </div>
-
             <div class="glass soft-shadow rounded-3xl">
-              <div class="border-b border-white/10 px-4 py-4 sm:px-5">
-                <h3 class="text-lg font-semibold">Feriados municipais</h3>
-                <p class="mt-1 text-sm text-slate-400">
+              <div class="border-b border-slate-200 px-4 py-4 sm:px-5">
+                <h3 class="text-lg font-semibold text-slate-900">Feriados municipais</h3>
+                <p class="mt-1 text-sm text-slate-500">
                   Cadastre os dias que também devem ficar fechados.
                 </p>
               </div>
               <form id="holidayForm" class="space-y-4 p-4 sm:p-5">
                 <div class="grid gap-3 sm:grid-cols-[0.9fr_1.1fr]">
-                  <label class="space-y-2 text-sm font-semibold text-slate-200">
+                  <label class="space-y-2 text-sm font-semibold text-slate-700">
                     <span>Data</span>
                     <input
                       id="holidayDate"
                       type="date"
-                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-sky-400/50"
+                      class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
                   </label>
-                  <label class="space-y-2 text-sm font-semibold text-slate-200">
+                  <label class="space-y-2 text-sm font-semibold text-slate-700">
                     <span>Descrição</span>
                     <input
                       id="holidayDescription"
                       type="text"
                       placeholder="Ex.: Aniversário da cidade"
-                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-sky-400/50"
+                      class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
                   </label>
                 </div>
@@ -283,49 +302,49 @@
                   <button
                     id="btnAddHoliday"
                     type="submit"
-                    class="rounded-2xl bg-sky-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-400"
+                    class="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
                   >
                     Adicionar feriado
                   </button>
-                  <p class="text-xs text-slate-400">
+                  <p class="text-xs text-slate-500">
                     Os feriados cadastrados fecham a agenda automaticamente.
                   </p>
                 </div>
               </form>
               <div
                 id="holidayList"
-                class="space-y-3 border-t border-white/10 p-4 sm:p-5"
+                class="space-y-3 border-t border-slate-200 p-4 sm:p-5"
               ></div>
             </div>
 
             <div class="glass soft-shadow rounded-3xl">
-              <div class="border-b border-white/10 px-4 py-4 sm:px-5">
-                <h3 class="text-lg font-semibold">Bloquear horários</h3>
-                <p class="mt-1 text-sm text-slate-400">
+              <div class="border-b border-slate-200 px-4 py-4 sm:px-5">
+                <h3 class="text-lg font-semibold text-slate-900">Bloquear horários</h3>
+                <p class="mt-1 text-sm text-slate-500">
                   Selecione horários para ficarem indisponíveis.
                 </p>
               </div>
               <form id="blockSlotForm" class="space-y-4 p-4 sm:p-5">
                 <div class="grid gap-4">
-                  <label class="space-y-2 text-sm font-semibold text-slate-200">
+                  <label class="space-y-2 text-sm font-semibold text-slate-700">
                     <span>Data</span>
                     <input
                       id="blockDate"
                       type="date"
-                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
+                      class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
                   </label>
                   <div>
                     <span
-                      class="mb-2 block text-sm font-semibold text-slate-200"
+                      class="mb-2 block text-sm font-semibold text-slate-700"
                       >Horários disponíveis</span
                     >
                     <div
                       id="blockHourCheckboxes"
-                      class="checkbox-grid min-h-[4rem] rounded-2xl border border-dashed border-white/10 bg-slate-950/20 p-4"
+                      class="checkbox-grid min-h-[4rem] rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4"
                     >
                       <p
-                        class="col-span-full text-center text-sm text-slate-400"
+                        class="col-span-full text-center text-sm text-slate-500"
                       >
                         Escolha uma data para ver os horários.
                       </p>
@@ -336,7 +355,7 @@
                   <button
                     id="btnAddBlock"
                     type="submit"
-                    class="rounded-2xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-400"
+                    class="rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-400"
                   >
                     Bloquear horários selecionados
                   </button>
@@ -344,36 +363,36 @@
               </form>
               <div
                 id="blockedSlotsList"
-                class="space-y-3 border-t border-white/10 p-4 sm:p-5"
+                class="space-y-3 border-t border-slate-200 p-4 sm:p-5"
               ></div>
             </div>
 
             <div class="glass soft-shadow rounded-3xl">
-              <div class="border-b border-white/10 px-4 py-4 sm:px-5">
-                <h3 class="text-lg font-semibold">Gerenciamento de PINs</h3>
-                <p class="mt-1 text-sm text-slate-400">
+              <div class="border-b border-slate-200 px-4 py-4 sm:px-5">
+                <h3 class="text-lg font-semibold text-slate-900">Gerenciamento de PINs</h3>
+                <p class="mt-1 text-sm text-slate-500">
                   Gerencie quem pode acessar este painel.
                 </p>
               </div>
               <form id="pinForm" class="space-y-4 p-4 sm:p-5">
                 <input type="hidden" id="pinId" />
                 <div class="grid gap-3">
-                  <label class="space-y-2 text-sm font-semibold text-slate-200">
+                  <label class="space-y-2 text-sm font-semibold text-slate-700">
                     <span>PIN de Acesso</span>
                     <input
                       id="pinValue"
                       type="text"
                       placeholder="Digite o PIN"
-                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition focus:border-emerald-400/50"
+                      class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                     />
                   </label>
-                  <label class="space-y-2 text-sm font-semibold text-slate-200">
+                  <label class="space-y-2 text-sm font-semibold text-slate-700">
                     <span>Descrição / Usuário</span>
                     <input
                       id="pinDesc"
                       type="text"
                       placeholder="Ex: Acesso Luan"
-                      class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-100 outline-none transition focus:border-emerald-400/50"
+                      class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                     />
                   </label>
                 </div>
@@ -381,14 +400,14 @@
                   <button
                     id="btnSavePin"
                     type="submit"
-                    class="rounded-2xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-400"
+                    class="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-500"
                   >
                     Salvar PIN
                   </button>
                   <button
                     id="btnCancelPinEdit"
                     type="button"
-                    class="hidden rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                    class="hidden rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                   >
                     Cancelar
                   </button>
@@ -396,45 +415,9 @@
               </form>
               <div
                 id="pinList"
-                class="space-y-3 border-t border-white/10 p-4 sm:p-5"
+                class="space-y-3 border-t border-slate-200 p-4 sm:p-5"
               ></div>
             </div>
-          </div>
-        </div>
-
-        <div class="mt-6 glass soft-shadow rounded-3xl">
-          <div class="border-b border-white/10 px-4 py-4 sm:px-5">
-            <h3 class="text-lg font-semibold">Todos os agendamentos</h3>
-            <p class="mt-1 text-sm text-slate-400">
-              Atualizado automaticamente quando um cliente agenda.
-            </p>
-          </div>
-          <div class="overflow-x-auto">
-            <table
-              class="min-w-full divide-y divide-white/10 text-left text-sm"
-            >
-              <thead class="bg-white/5 text-slate-300">
-                <tr>
-                  <th class="px-4 py-3 font-semibold">Data</th>
-                  <th class="px-4 py-3 font-semibold">Hora</th>
-                  <th class="px-4 py-3 font-semibold">Cliente</th>
-                  <th class="px-4 py-3 font-semibold">Telefone</th>
-                  <th class="px-4 py-3 font-semibold">Placa</th>
-                  <th class="px-4 py-3 font-semibold">Status</th>
-                  <th class="px-4 py-3 font-semibold">Ações</th>
-                </tr>
-              </thead>
-              <tbody
-                id="appointmentsBody"
-                class="divide-y divide-white/10"
-              ></tbody>
-            </table>
-          </div>
-          <div
-            id="emptyAppointments"
-            class="hidden px-5 py-10 text-center text-slate-400"
-          >
-            Nenhum agendamento encontrado.
           </div>
         </div>
       </section>
@@ -456,23 +439,23 @@
 
     <div
       id="editModal"
-      class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 px-4"
+      class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/70 px-4 backdrop-blur-sm"
     >
       <div class="glass soft-shadow w-full max-w-lg rounded-3xl p-5 sm:p-6">
         <div class="flex items-start justify-between gap-4">
           <div>
-            <p class="text-xs uppercase tracking-[0.35em] text-sky-300/80">
+            <p class="text-xs uppercase tracking-[0.35em] text-blue-600/80">
               Editar
             </p>
-            <h3 class="mt-2 text-2xl font-bold">Atualizar agendamento</h3>
-            <p class="mt-2 text-sm text-slate-300">
+            <h3 class="mt-2 text-2xl font-bold text-slate-900">Atualizar agendamento</h3>
+            <p class="mt-2 text-sm text-slate-600">
               Altere a data, hora ou dados do cliente.
             </p>
           </div>
           <button
             id="btnCloseEditModal"
             type="button"
-            class="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+            class="rounded-xl border border-slate-300 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
           >
             Fechar
           </button>
@@ -484,7 +467,7 @@
             <div>
               <label
                 for="editNome"
-                class="mb-2 block text-sm font-semibold text-slate-200"
+                class="mb-2 block text-sm font-semibold text-slate-700"
                 >Nome completo</label
               >
               <input
@@ -493,13 +476,13 @@
                 required
                 placeholder="Digite o nome completo"
                 title="Nome completo"
-                class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
+                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
               <label
                 for="editTelefone"
-                class="mb-2 block text-sm font-semibold text-slate-200"
+                class="mb-2 block text-sm font-semibold text-slate-700"
                 >Telefone</label
               >
               <input
@@ -508,14 +491,14 @@
                 required
                 placeholder="(00) 00000-0000"
                 title="Telefone do cliente"
-                class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
+                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
           <div>
             <label
               for="editPlaca"
-              class="mb-2 block text-sm font-semibold text-slate-200"
+              class="mb-2 block text-sm font-semibold text-slate-700"
               >Placa</label
             >
             <input
@@ -525,14 +508,14 @@
               required
               placeholder="ABC1234"
               title="Placa do veículo"
-              class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 font-mono uppercase text-slate-100 outline-none transition focus:border-sky-400/50"
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 font-mono uppercase text-slate-800 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div class="grid gap-4 md:grid-cols-2">
             <div>
               <label
                 for="editData"
-                class="mb-2 block text-sm font-semibold text-slate-200"
+                class="mb-2 block text-sm font-semibold text-slate-700"
                 >Data</label
               >
               <input
@@ -540,20 +523,20 @@
                 type="date"
                 required
                 title="Data do agendamento"
-                class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
+                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
               <label
                 for="editHora"
-                class="mb-2 block text-sm font-semibold text-slate-200"
+                class="mb-2 block text-sm font-semibold text-slate-700"
                 >Hora</label
               >
               <select
                 id="editHora"
                 required
                 title="Hora do agendamento"
-                class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
+                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               ></select>
             </div>
           </div>
@@ -561,14 +544,14 @@
             <button
               id="btnSaveEdit"
               type="submit"
-              class="inline-flex flex-1 items-center justify-center rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-5 py-3 text-sm font-bold uppercase tracking-[0.2em] text-white transition hover:brightness-110"
+              class="inline-flex flex-1 items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 px-5 py-3 text-sm font-bold uppercase tracking-[0.2em] text-white transition hover:brightness-110"
             >
               Salvar
             </button>
             <button
               id="btnCancelEdit"
               type="button"
-              class="inline-flex flex-1 items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+              class="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
             >
               Cancelar
             </button>
@@ -724,10 +707,14 @@
       }
 
       function formatDateTime(value) {
+        if (!value || !value.toDate) {
+          return "agora";
+        }
+        const date = value.toDate();
         return new Intl.DateTimeFormat("pt-BR", {
           dateStyle: "short",
           timeStyle: "short",
-        }).format(new Date(value));
+        }).format(date);
       }
 
       function formatMonthLabel(year, month) {
@@ -748,13 +735,13 @@
 
       function addToast(title, message, tone = "info") {
         const palette = {
-          info: "border-sky-400/20 bg-slate-950/95 text-slate-100",
-          success: "border-emerald-400/20 bg-emerald-950/95 text-emerald-50",
-          warning: "border-amber-400/20 bg-amber-950/95 text-amber-50",
+          info: "border-blue-200 bg-white text-slate-800",
+          success: "border-emerald-200 bg-white text-slate-800",
+          warning: "border-amber-200 bg-white text-slate-800",
         };
 
         const toast = document.createElement("div");
-        toast.className = `pointer-events-auto w-[min(92vw,22rem)] rounded-2xl border px-4 py-3 shadow-2xl ${palette[tone] || palette.info}`;
+        toast.className = `pointer-events-auto w-[min(92vw,22rem)] rounded-xl border px-4 py-3 shadow-lg ${palette[tone] || palette.info}`;
         toast.innerHTML = `<p class="text-sm font-bold">${escapeHtml(title)}</p><p class="mt-1 text-sm opacity-90">${escapeHtml(message)}</p>`;
         toastStack.appendChild(toast);
         setTimeout(
@@ -802,19 +789,19 @@
 
         appointmentsBody.innerHTML = sortedAppointments
           .map((item) => {
-            const isPast = new Date(`${item.data}T${item.hora}:00`) < now;
+            const isPast = new Date(`${item.data}T${item.hora}:00`) < now && item.data !== todayIso;
             return `
-            <tr class="hover:bg-white/5 transition-opacity ${isPast ? "opacity-50 line-through" : ""}">
-              <td class="px-4 py-3 text-slate-200">${escapeHtml(formatDate(item.data))}</td>
-              <td class="px-4 py-3 font-semibold text-white">${escapeHtml(item.hora)}</td>
-              <td class="px-4 py-3 text-slate-200">${escapeHtml(item.clienteNome)}</td>
-              <td class="px-4 py-3 text-slate-300">${escapeHtml(item.clienteTelefone)}</td>
-              <td class="px-4 py-3 font-mono text-slate-100">${escapeHtml(item.placa)}</td>
-              <td class="px-4 py-3"><span class="rounded-full bg-sky-400/15 px-3 py-1 text-xs font-semibold text-sky-200">${escapeHtml(item.status || "agendado")}</span></td>
+            <tr class="hover:bg-slate-50 transition-opacity ${isPast ? "opacity-50" : ""}">
+              <td class="px-4 py-3 text-slate-700">${escapeHtml(formatDate(item.data))}</td>
+              <td class="px-4 py-3 font-semibold text-slate-900">${escapeHtml(item.hora)}</td>
+              <td class="px-4 py-3 text-slate-700">${escapeHtml(item.clienteNome)}</td>
+              <td class="px-4 py-3 text-slate-600">${escapeHtml(item.clienteTelefone)}</td>
+              <td class="px-4 py-3 font-mono text-slate-800">${escapeHtml(item.placa)}</td>
+              <td class="px-4 py-3"><span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800">${escapeHtml(item.status || "agendado")}</span></td>
               <td class="px-4 py-3">
                 <div class="flex flex-wrap gap-2">
-                  <button type="button" data-action="edit" data-id="${item.id}" class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10">Editar</button>
-                  <button type="button" data-action="delete" data-id="${item.id}" class="rounded-xl border border-rose-400/20 bg-rose-400/10 px-3 py-2 text-xs font-semibold text-rose-100 transition hover:bg-rose-400/15">Cancelar</button>
+                  <button type="button" data-action="edit" data-id="${item.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Editar</button>
+                  <button type="button" data-action="delete" data-id="${item.id}" class="rounded-lg border border-rose-500/30 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-100">Cancelar</button>
                 </div>
               </td>
             </tr>
@@ -847,13 +834,13 @@
         notificationsList.innerHTML = state.notifications
           .map(
             (item) => `
-            <article class="rounded-2xl border ${item.lida ? "border-white/10 bg-slate-950/25" : "border-emerald-400/20 bg-emerald-400/8"} p-4">
+            <article class="rounded-xl border ${item.lida ? "border-slate-200 bg-slate-50/70" : "border-emerald-200 bg-emerald-50"} p-4">
               <div class="flex items-start justify-between gap-3">
                 <div>
-                  <p class="text-sm font-bold text-white">${escapeHtml(item.titulo)}</p>
-                  <p class="mt-1 text-sm text-slate-300">${escapeHtml(item.mensagem)}</p>
+                  <p class="text-sm font-bold text-slate-800">${escapeHtml(item.titulo)}</p>
+                  <p class="mt-1 text-sm text-slate-600">${escapeHtml(item.mensagem)}</p>
                 </div>
-                <span class="whitespace-nowrap rounded-full bg-white/5 px-2 py-1 text-[11px] font-semibold text-slate-300">${escapeHtml(formatDateTime(item.createdAt))}</span>
+                <span class="whitespace-nowrap rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-500">${escapeHtml(formatDateTime(item.createdAt))}</span>
               </div>
             </article>
           `,
@@ -880,17 +867,17 @@
           .map((item) => {
             const isPast = new Date(`${item.data}T${item.hora}:00`) < now;
             return `
-            <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4 transition-opacity ${isPast ? "opacity-50" : ""}">
+            <div class="rounded-xl border border-slate-200 bg-slate-50/80 p-4 transition-opacity ${isPast ? "opacity-60" : ""}">
               <div class="flex items-start justify-between gap-3">
                 <div class="${isPast ? "line-through" : ""}">
-                  <p class="text-base font-bold text-white">${escapeHtml(item.clienteNome)}</p>
-                  <p class="mt-1 text-sm text-slate-300">${escapeHtml(item.placa)} - ${escapeHtml(item.clienteTelefone)}</p>
+                  <p class="text-base font-bold text-slate-800">${escapeHtml(item.clienteNome)}</p>
+                  <p class="mt-1 text-sm text-slate-600">${escapeHtml(item.placa)} - ${escapeHtml(item.clienteTelefone)}</p>
                 </div>
                 <div class="flex flex-col items-end gap-2">
-                  <span class="rounded-full bg-sky-400/15 px-3 py-1 text-sm font-bold text-sky-200">${escapeHtml(item.hora)}</span>
+                  <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-bold text-blue-800">${escapeHtml(item.hora)}</span>
                   <div class="flex gap-2">
-                    <button type="button" data-action="edit" data-id="${item.id}" class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10">Editar</button>
-                    <button type="button" data-action="delete" data-id="${item.id}" class="rounded-xl border border-rose-400/20 bg-rose-400/10 px-3 py-2 text-xs font-semibold text-rose-100 transition hover:bg-rose-400/15">Cancelar</button>
+                    <button type="button" data-action="edit" data-id="${item.id}" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Editar</button>
+                    <button type="button" data-action="delete" data-id="${item.id}" class="rounded-lg border border-rose-500/30 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-100">Cancelar</button>
                   </div>
                 </div>
               </div>
@@ -1061,14 +1048,14 @@
           const count = counts[iso] || 0;
 
           const classes = [
-            "min-h-[4.75rem] rounded-2xl border p-3 text-left transition hover:-translate-y-0.5 hover:border-sky-400/40 hover:bg-white/5",
-            isSelected ? "border-sky-400/60 bg-sky-400/15" : "",
+            "min-h-[4.75rem] rounded-xl border p-3 text-left transition hover:-translate-y-0.5 hover:border-blue-400/60 hover:bg-white",
+            isSelected ? "border-blue-500 bg-blue-50 ring-2 ring-blue-500" : "bg-white",
             !isSelected && isToday
-              ? "border-emerald-400/40 bg-emerald-400/8"
+              ? "border-emerald-400/80 bg-emerald-50"
               : "",
             // Disponível (Zero agendamentos): Azul Claro
-            !isSelected && !isToday && !closedReason && count === 0
-              ? "border-sky-400/20 bg-sky-500/10"
+            !isSelected && !isToday && !closedReason && count === 0 && !isWeekend
+              ? "border-slate-200"
               : "",
             // Ocupado (Pelo menos um agendamento): Verde
             !isSelected && !isToday && !closedReason && count > 0
@@ -1076,22 +1063,22 @@
               : "",
             // Fechado ou Fim de semana: Vermelho
             !isSelected && closedReason
-              ? "border-rose-500/40 bg-rose-500/10 text-rose-200"
+              ? "border-rose-200 bg-rose-50 text-rose-700"
               : "",
           ].join(" ");
 
           cells.push(`
             <button type="button" class="${classes}" data-date="${iso}">
               <div class="flex items-start justify-between gap-2">
-                <span class="text-sm font-bold ${isSelected ? "text-white" : "text-slate-100"}">${dayNumber}</span>
+                <span class="text-sm font-bold ${isSelected ? "text-blue-700" : "text-slate-800"}">${dayNumber}</span>
                 ${
                   closedReason
-                    ? '<span class="rounded-full bg-rose-500/20 px-2 py-1 text-[11px] font-bold text-rose-300">fechado</span>'
+                    ? '<span class="rounded-full bg-rose-100 px-2 py-1 text-[11px] font-bold text-rose-600">fechado</span>'
                     : count > 0
-                      ? `<span class="rounded-full bg-emerald-500/20 px-2 py-1 text-[11px] font-bold text-emerald-300">${count}</span>`
-                      : '<span class="text-[11px] text-sky-400/60 font-bold">livre</span>'
+                      ? `<span class="rounded-full bg-emerald-100 px-2 py-1 text-[11px] font-bold text-emerald-700">${count}</span>`
+                      : '<span class="text-[11px] text-blue-500/80 font-bold">livre</span>'
                 }
-              </div><div class="mt-2 text-[9px] uppercase tracking-normal font-bold ${closedReason ? "text-rose-400/70" : count > 0 ? "text-emerald-400/70" : "text-sky-400/70"}">${closedReason ? closedReason.replaceAll("_", " ") : count > 0 ? "ocupado" : "livre"}</div>
+              </div><div class="mt-2 text-[9px] uppercase tracking-normal font-bold ${closedReason ? "text-rose-500/80" : count > 0 ? "text-emerald-600/80" : "text-blue-500/80"}">${closedReason ? closedReason.replaceAll("_", " ") : count > 0 ? "ocupado" : "livre"}</div>
             </button>
           `);
         }
@@ -1390,13 +1377,13 @@
         pinList.innerHTML = state.pins
           .map(
             (pin) => `
-          <div class="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/20 p-3">
+          <div class="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/70 p-3">
             <div class="overflow-hidden">
-              <p class="text-sm font-bold text-white truncate">${escapeHtml(pin.valor)}</p>
-              <p class="text-[11px] text-slate-400 truncate">${escapeHtml(pin.descricao || "Sem descrição")}</p>
+              <p class="text-sm font-bold text-slate-800 truncate">${escapeHtml(pin.valor)}</p>
+              <p class="text-[11px] text-slate-500 truncate">${escapeHtml(pin.descricao || "Sem descrição")}</p>
             </div>
             <div class="flex gap-2 ml-3">
-              <button type="button" onclick="editPinUI('${pin.id}')" class="text-xs font-semibold text-sky-400 hover:text-sky-300">Editar</button>
+              <button type="button" onclick="editPinUI('${pin.id}')" class="text-xs font-semibold text-blue-600 hover:text-blue-500">Editar</button>
               <button type="button" onclick="deletePin('${pin.id}')" class="text-xs font-semibold text-rose-400 hover:text-rose-300">Remover</button>
             </div>
           </div>
@@ -1489,7 +1476,7 @@
         const container = blockHourCheckboxes;
         if (!dateStr) {
           container.innerHTML =
-            '<p class="col-span-full text-center text-sm text-slate-400">Escolha uma data para ver os horários.</p>';
+            '<p class="col-span-full text-center text-sm text-slate-500">Escolha uma data para ver os horários.</p>';
           return;
         }
 
@@ -1524,7 +1511,7 @@
             container.innerHTML = disponiveis
               .map(
                 (h) => `
-                <label class="checkbox-label cursor-pointer rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10 has-[:checked]:border-amber-400/50 has-[:checked]:bg-amber-500/15 has-[:checked]:text-amber-200">
+                <label class="checkbox-label cursor-pointer rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 has-[:checked]:border-amber-400/80 has-[:checked]:bg-amber-50 has-[:checked]:text-amber-700">
                   <input type="checkbox" name="horas_para_bloquear" value="${h}" class="sr-only">
                   <span>${h}</span>
                 </label>
@@ -1533,7 +1520,7 @@
               .join("");
           } else {
             container.innerHTML =
-              '<p class="col-span-full text-center text-sm text-slate-400">Nenhum horário livre neste dia.</p>';
+              '<p class="col-span-full text-center text-sm text-slate-500">Nenhum horário livre neste dia.</p>';
           }
         } catch (err) {
           console.error("Erro ao buscar horários para bloqueio:", err);
@@ -1561,7 +1548,7 @@
 
         if (sortedDates.length === 0) {
           blockedSlotsList.innerHTML =
-            '<p class="text-center text-sm text-slate-400">Nenhum horário bloqueado.</p>';
+            '<p class="text-center text-sm text-slate-500">Nenhum horário bloqueado.</p>';
           return;
         }
 
@@ -1572,14 +1559,14 @@
             );
             return `
             <div class="space-y-2">
-              <p class="text-sm font-bold text-slate-200">${formatDate(date)}</p>
+              <p class="text-sm font-bold text-slate-700">${formatDate(date)}</p>
               <div class="checkbox-grid">
                 ${slots
                   .map(
                     (slot) => `
-                  <div class="group relative flex cursor-pointer items-center justify-center rounded-xl border border-amber-400/30 bg-amber-500/15 px-3 py-2 text-sm font-semibold text-amber-200">
+                  <div class="group relative flex cursor-pointer items-center justify-center rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-700">
                     <span>${slot.hora}</span>
-                    <button onclick="deleteBlockedSlot('${slot.id}')" class="absolute inset-0 flex items-center justify-center rounded-xl bg-rose-500/80 text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100">Remover</button>
+                    <button onclick="deleteBlockedSlot('${slot.id}')" class="absolute inset-0 flex items-center justify-center rounded-lg bg-rose-500/90 text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100">Remover</button>
                   </div>
                 `,
                   )
