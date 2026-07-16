@@ -707,6 +707,7 @@
             );
           }
         }
+        slots.push(`${CONFIG.fim}:00`); // Adiciona o horário das 17:00
         return slots;
       }
 
@@ -950,11 +951,10 @@
           for (let h = CONFIG.inicio; h < CONFIG.fim; h++) {
             if (h === CONFIG.almoco) continue;
             for (let m = 0; m < 60; m += CONFIG.intervalo) {
-              slots.push(
-                `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`,
-              );
+              slots.push(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
             }
           }
+          slots.push(`${CONFIG.fim}:00`);
           const disponiveis = slots.filter(
             (s) => !ocupados.has(s) || s === selectedHour,
           );
