@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LG PLACAS - Agendamento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --panel: rgba(15, 23, 42, 0.72);
+        --line: rgba(148, 163, 184, 0.18);
+      }
+
+      body {
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(59, 130, 246, 0.22),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at top right,
+            rgba(14, 165, 233, 0.14),
+            transparent 28%
+          ),
+          linear-gradient(180deg, #020617 0%, #0f172a 50%, #111827 100%);
+      }
+
+      .glass {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+      }
+
+      .soft-shadow {
+        box-shadow: 0 24px 80px rgba(2, 6, 23, 0.42);
+      }
+
+      .loading {
+        cursor: wait;
+        opacity: 0.7;
+      }
+
+      .appointment-shell {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .appointment-shell::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(135deg, rgba(14, 165, 233, 0.16), transparent 34%),
+          linear-gradient(315deg, rgba(16, 185, 129, 0.14), transparent 30%);
+        pointer-events: none;
+      }
+
+      .appointment-shell > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .back-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid rgba(125, 211, 252, 0.34);
+        background: rgba(14, 165, 233, 0.14);
+        color: #e0f2fe;
+        border-radius: 14px;
+        padding: 10px 14px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      .back-button:hover {
+        background: rgba(14, 165, 233, 0.24);
+        border-color: rgba(125, 211, 252, 0.58);
+        transform: translateY(-1px);
+      }
+
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+      }
+
+      /*
+       * ATENÇÃO: O calendário nativo do <input type="date"> é controlado pelo navegador
+       * e não pode ser estilizado diretamente para colorir dias específicos (azul/vermelho).
+       */
+      @media print {
+        body {
+          background: white !important;
+          color: black !important;
+        }
+        .glass {
+          background: white !important;
+          border: 1px solid #cbd5e1 !important;
+          box-shadow: none !important;
+          -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important;
+        }
+        #headerContent,
+        #agendamentoForm,
+        .no-print,
+        button {
+          display: none !important;
+        }
+        #successView {
+          display: block !important;
+        }
+        #successView * {
+          color: black !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen text-slate-100">
+    <main
+      class="mx-auto flex min-h-screen w-full max-w-5xl items-center px-3 py-8 sm:px-4 lg:px-5"
+    >
+      <section class="appointment-shell glass soft-shadow w-full rounded-3xl p-5 sm:p-8">
+        <div
+          id="headerContent"
+          class="mb-6"
+        >
+          <div class="mb-6 flex items-center justify-between gap-3">
+            <a href="index.html" class="back-button">
+              <span aria-hidden="true">&larr;</span>
+              Voltar ao site
+            </a>
+            <span
+              class="hidden rounded-full border border-emerald-400/25 bg-emerald-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-200 sm:inline-flex"
+              >Agenda online</span
+            >
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+            <div>
+              <p class="text-xs uppercase tracking-[0.45em] text-sky-300/80">
+                LG PLACAS
+              </p>
+              <h1 class="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+                Agendar troca de placas
+              </h1>
+              <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate-300">
+                Escolha a data, veja os horários disponíveis e confirme seu
+                atendimento para placa Mercosul com rapidez.
+              </p>
+              <div
+                class="mt-5 inline-flex flex-wrap items-center gap-2 rounded-2xl border border-sky-400/25 bg-sky-400/10 px-4 py-3 text-sm text-sky-100"
+              >
+                <span
+                  class="font-semibold uppercase tracking-[0.18em] text-sky-200/90"
+                  >Atendimento</span
+                >
+                <span>Segunda a sexta, exceto feriados.</span>
+              </div>
+            </div>
+
+            <div
+              class="rounded-3xl border border-white/10 bg-slate-950/35 p-5 shadow-2xl"
+            >
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-emerald-300">
+                Mais rápido
+              </p>
+              <ul class="mt-4 space-y-3 text-sm text-slate-200">
+                <li class="flex gap-3">
+                  <span class="mt-1 h-2 w-2 rounded-full bg-emerald-400"></span>
+                  Horário reservado para evitar espera.
+                </li>
+                <li class="flex gap-3">
+                  <span class="mt-1 h-2 w-2 rounded-full bg-sky-400"></span>
+                  Confirmação com resumo do agendamento.
+                </li>
+                <li class="flex gap-3">
+                  <span class="mt-1 h-2 w-2 rounded-full bg-blue-400"></span>
+                  Atendimento para troca e instalação de placas.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <form
+          id="agendamentoForm"
+          class="grid gap-4 rounded-3xl border border-sky-400/20 bg-slate-950/30 p-4 shadow-2xl shadow-sky-950/30 sm:p-5"
+        >
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <label
+                for="nome"
+                class="mb-2 block text-sm font-semibold text-slate-200"
+                >Nome completo</label
+              >
+              <input
+                type="text"
+                id="nome"
+                required
+                class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50 focus:bg-slate-950/60"
+                placeholder="Ex: João Silva"
+                title="Nome completo"
+              />
+            </div>
+            <div>
+              <label
+                for="telefone"
+                class="mb-2 block text-sm font-semibold text-slate-200"
+                >WhatsApp / Telefone</label
+              >
+              <input
+                type="tel"
+                id="telefone"
+                required
+                class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50 focus:bg-slate-950/60"
+                placeholder="(00) 00000-0000"
+                title="WhatsApp / Telefone"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="placa"
+              class="mb-2 block text-sm font-semibold text-slate-200"
+              >Placa do veículo</label
+            >
+            <input
+              type="text"
+              id="placa"
+              required
+              maxlength="7"
+              class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 font-mono text-lg uppercase text-slate-100 outline-none transition focus:border-sky-400/50 focus:bg-slate-950/60"
+              placeholder="ABC1D23"
+              title="Placa do veículo"
+            />
+          </div>
+
+          <div class="grid gap-4 border-t border-white/10 pt-4 md:grid-cols-2">
+            <div>
+              <label
+                for="data"
+                class="mb-2 block text-sm font-semibold text-slate-200"
+                >Data do serviço</label
+              >
+              <input
+                type="date"
+                id="data"
+                required
+                class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50 focus:bg-slate-950/60"
+                title="Data do serviço"
+              />
+            </div>
+            <div>
+              <label
+                for="hora"
+                class="mb-2 block text-sm font-semibold text-slate-200"
+                >Horário disponível</label
+              >
+              <select
+                id="hora"
+                disabled
+                class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50 disabled:cursor-not-allowed disabled:bg-slate-800"
+                title="Horário disponível"
+              >
+                <option value="">Selecione uma data</option>
+              </select>
+            </div>
+          </div>
+
+          <div
+            class="rounded-2xl border border-sky-400/15 bg-sky-400/8 px-4 py-3 text-sm text-slate-300"
+          >
+            Os horários são liberados automaticamente conforme o dia escolhido.
+          </div>
+
+          <button
+            type="submit"
+            id="btnAgendar"
+            class="inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-5 py-4 text-sm font-bold uppercase tracking-[0.22em] text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Finalizar agendamento
+          </button>
+
+          <div
+            id="feedback"
+            class="hidden rounded-2xl px-4 py-3 text-center text-sm font-semibold"
+          ></div>
+        </form>
+
+        <!-- Seção de Consulta (Fica oculta por padrão) -->
+        <div id="consultarContainer" class="mt-4 text-center no-print">
+          <button
+            id="btnTrocarParaConsulta"
+            class="text-xs uppercase tracking-widest text-slate-400 hover:text-sky-300 transition"
+          >
+            Já possui agendamento? Consulte aqui
+          </button>
+        </div>
+
+        <div
+          id="consultarForm"
+          class="hidden grid gap-4 rounded-3xl border border-white/10 bg-slate-950/20 p-4 sm:p-5"
+        >
+          <h3 class="text-lg font-bold text-sky-300">Consultar Agendamento</h3>
+          <div class="grid gap-4 md:grid-cols-2">
+            <input
+              type="text"
+              id="consPlaca"
+              placeholder="Placa do Veículo"
+              class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 font-mono uppercase text-slate-100 outline-none transition focus:border-sky-400/50"
+            />
+            <input
+              type="tel"
+              id="consTelefone"
+              placeholder="WhatsApp / Telefone"
+              class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
+            />
+          </div>
+          <button
+            id="btnBuscarAgendamento"
+            class="w-full rounded-2xl bg-sky-500/10 border border-sky-400/20 py-3 text-sm font-bold uppercase tracking-widest text-sky-200 hover:bg-sky-500/20 transition"
+          >
+            Buscar Agendamento
+          </button>
+          <button
+            id="btnVoltarAgendar"
+            class="text-xs text-slate-500 hover:text-slate-300 transition uppercase tracking-widest"
+          >
+            Voltar para novo agendamento
+          </button>
+        </div>
+
+        <!-- Tela de Sucesso (Confirmacao) -->
+        <div id="successView" class="hidden text-center space-y-6 py-4">
+          <div
+            class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="h-10 w-10"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-emerald-100">
+            Agendamento de Emplacamento Confirmado!
+          </h2>
+
+          <div
+            class="rounded-2xl border border-white/10 bg-slate-950/40 p-5 text-left space-y-3"
+          >
+            <p
+              class="text-xs uppercase tracking-wider text-slate-400 font-bold"
+            >
+              Resumo do Agendamento
+            </p>
+            <div class="grid grid-cols-2 gap-y-2 text-sm">
+              <span class="text-slate-400">Cliente:</span>
+              <span id="resumoNome" class="font-semibold text-slate-100"></span>
+              <span class="text-slate-400">Placa:</span>
+              <span
+                id="resumoPlaca"
+                class="font-semibold text-slate-100 uppercase font-mono"
+              ></span>
+              <span class="text-slate-400">Data e Hora:</span>
+              <span
+                id="resumoDataHora"
+                class="font-semibold text-slate-100"
+              ></span>
+            </div>
+          </div>
+
+          <div class="space-y-4 pt-4 border-t border-white/10">
+            <div class="flex flex-col items-center gap-1">
+              <p
+                class="text-xs uppercase tracking-[0.2em] text-sky-300 font-bold"
+              >
+                Endereço da Empresa
+              </p>
+              <p class="text-sm text-slate-200 text-center">
+                Praça Doutor josé brás, n° 57, Morro chic, Itajubá - MG
+              </p>
+              <p class="text-xs text-slate-400">
+                (Em frente à rodoviária e do lado do novo hotel)
+              </p>
+            </div>
+
+            <div class="flex flex-col items-center gap-1">
+              <p
+                class="text-xs uppercase tracking-[0.2em] text-sky-300 font-bold"
+              >
+                Telefone / Suporte
+              </p>
+              <p class="text-sm text-slate-200 font-semibold">
+                (35) 99866-9644
+              </p>
+            </div>
+          </div>
+
+          <div class="no-print pt-6 space-y-3">
+            <button
+              id="btnDownload"
+              class="w-full rounded-2xl border border-sky-400/20 bg-sky-500/10 px-5 py-4 text-sm font-bold uppercase tracking-[0.2em] text-sky-200 transition hover:bg-sky-500/20"
+            >
+              Baixar Comprovante (PDF)
+            </button>
+
+            <button
+              onclick="window.location.href = '/'"
+              class="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-bold uppercase tracking-[0.2em] text-slate-200 transition hover:bg-white/10"
+            >
+              Voltar ao Início
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+      // IMPORTANTE: Substitua os valores abaixo pelos dados reais do seu Console do Firebase
+      // Vá em: Configurações do Projeto -> Geral -> Seus Aplicativos -> Web App
+      const firebaseConfig = {
+        apiKey: "AIzaSyAT47ETWKHfHGya_rk76YrRqBPO7aI3N0Y",
+        authDomain: "instagramapp-34791.firebaseapp.com",
+        databaseURL: "https://instagramapp-34791-default-rtdb.firebaseio.com",
+        projectId: "instagramapp-34791",
+        storageBucket: "instagramapp-34791.appspot.com",
+        messagingSenderId: "749418759280",
+        appId: "1:749418759280:web:758c036737c686152f20b5",
+        measurementId: "G-5FDLV6V8RR",
+      };
+
+      if (window.location.protocol === "file:") {
+        alert(
+          "AVISO: O Firebase pode não funcionar corretamente se aberto via arquivo local (file://). Por favor, use um servidor local ou o Firebase Hosting.",
+        );
+      }
+
+      // Inicializa o Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      // Lógica de horários (Antigo CONFIG do server.js)
+      const CONFIG = { inicio: 9, fim: 17, almoco: 12, intervalo: 30 };
+
+      function buildSlots() {
+        const slots = [];
+        for (let h = CONFIG.inicio; h < CONFIG.fim; h++) {
+          if (h === CONFIG.almoco) continue;
+          for (let m = 0; m < 60; m += CONFIG.intervalo) {
+            slots.push(
+              `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`,
+            );
+          }
+        }
+        return slots;
+      }
+
+      const form = document.getElementById("agendamentoForm");
+      const dateInput = document.getElementById("data");
+      const hourSelect = document.getElementById("hora");
+      const feedback = document.getElementById("feedback");
+      const btnAgendar = document.getElementById("btnAgendar");
+      const btnDownload = document.getElementById("btnDownload");
+      const telefoneInput = document.getElementById("telefone");
+      const consultarContainer = document.getElementById("consultarContainer");
+      const consultarForm = document.getElementById("consultarForm");
+      const btnTrocarParaConsulta = document.getElementById(
+        "btnTrocarParaConsulta",
+      );
+      const btnVoltarAgendar = document.getElementById("btnVoltarAgendar");
+      const btnBuscarAgendamento = document.getElementById(
+        "btnBuscarAgendamento",
+      );
+      const consPlaca = document.getElementById("consPlaca");
+      const consTelefone = document.getElementById("consTelefone");
+
+      btnDownload.addEventListener("click", () => {
+        window.print();
+      });
+
+      // Alternar entre Agendar e Consultar
+      btnTrocarParaConsulta.addEventListener("click", () => {
+        form.classList.add("hidden");
+        consultarContainer.classList.add("hidden");
+        consultarForm.classList.remove("hidden");
+      });
+
+      btnVoltarAgendar.addEventListener("click", () => {
+        form.classList.remove("hidden");
+        consultarContainer.classList.remove("hidden");
+        consultarForm.classList.add("hidden");
+      });
+
+      // Lógica de Consulta
+      btnBuscarAgendamento.addEventListener("click", async () => {
+        const placa = consPlaca.value;
+        const telefone = consTelefone.value;
+
+        if (!placa || !telefone) return alert("Preencha a placa e o telefone.");
+
+        try {
+          const placaNorm = placa.toUpperCase().replace(/\s+/g, "");
+          const docSnap = await db
+            .collection("agendamento instalação placas")
+            .doc(placaNorm)
+            .get();
+
+          if (!docSnap.exists) throw new Error("Agendamento não encontrado.");
+          const data = docSnap.data();
+
+          if (data.clienteTelefone !== telefone)
+            throw new Error(
+              "Telefone não confere com o agendamento desta placa.",
+            );
+
+          exibirSucesso(data);
+        } catch (err) {
+          console.error(err);
+          alert(
+            err.message.includes("offline")
+              ? "Erro de conexão: Verifique se as chaves do Firebase estão corretas e se você tem internet."
+              : err.message,
+          );
+        }
+      });
+
+      function exibirSucesso(agendamento) {
+        document.getElementById("resumoNome").textContent =
+          agendamento.clienteNome;
+        document.getElementById("resumoPlaca").textContent = agendamento.placa;
+        document.getElementById("resumoDataHora").textContent =
+          `${agendamento.data.split("-").reverse().join("/")} às ${agendamento.hora}`;
+
+        document.getElementById("headerContent").classList.add("hidden");
+        form.classList.add("hidden");
+        consultarForm.classList.add("hidden");
+        consultarContainer.classList.add("hidden");
+        document.getElementById("successView").classList.remove("hidden");
+      }
+
+      // Máscara de Telefone Profissional
+      function aplicarMascaraTelefone(e) {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 11) value = value.slice(0, 11);
+        if (value.length > 10) {
+          value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+        } else if (value.length > 5) {
+          value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+        } else if (value.length > 2) {
+          value = value.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+        } else if (value.length > 0) {
+          value = value.replace(/^(\d*)/, "($1");
+        }
+        e.target.value = value;
+      }
+
+      telefoneInput.addEventListener("input", aplicarMascaraTelefone);
+      consTelefone.addEventListener("input", aplicarMascaraTelefone);
+
+      const todayInput = new Date();
+      todayInput.setHours(0, 0, 0, 0);
+      todayInput.setMinutes(
+        todayInput.getMinutes() - todayInput.getTimezoneOffset(),
+      );
+      dateInput.min = todayInput.toISOString().split("T")[0];
+
+      function showFeedback(text, classes) {
+        feedback.textContent = text;
+        feedback.className = `rounded-2xl px-4 py-3 text-center text-sm font-semibold ${classes}`;
+        feedback.classList.remove("hidden");
+      }
+
+      function setLoading(isLoading) {
+        btnAgendar.disabled = isLoading;
+        btnAgendar.textContent = isLoading
+          ? "Processando..."
+          : "Finalizar agendamento";
+        btnAgendar.classList.toggle("loading", isLoading);
+      }
+
+      dateInput.addEventListener("change", async (event) => {
+        const dataStr = event.target.value;
+        if (!dataStr) return;
+
+        hourSelect.disabled = true;
+        hourSelect.innerHTML =
+          '<option value="">Carregando horários...</option>';
+
+        try {
+          const dateObj = new Date(`${dataStr}T12:00:00Z`);
+          const diaSemana = dateObj.getUTCDay();
+
+          if (diaSemana === 0 || diaSemana === 6) {
+            throw new Error("Fins de semana não atendemos.");
+          }
+
+          // Verifica Feriados e Agendamentos Ocupados no Firebase
+          const [feriadoSnap, ocupadosSnap] = await Promise.all([
+            db.collection("feriados").doc(dataStr).get(),
+            db
+              .collection("agendamento instalação placas")
+              .where("data", "==", dataStr)
+              .get(),
+          ]);
+
+          if (feriadoSnap.exists)
+            throw new Error(`Feriado: ${feriadoSnap.data().descricao}`);
+
+          const ocupados = new Set(
+            ocupadosSnap.docs.map((doc) => doc.data().hora),
+          );
+          let disponiveis = buildSlots().filter((slot) => !ocupados.has(slot));
+
+          // Filtro para o dia de hoje
+          const agora = new Date();
+          const dataHoje = new Date(
+            agora.getTime() - agora.getTimezoneOffset() * 60000,
+          )
+            .toISOString()
+            .split("T")[0];
+          if (dataStr === dataHoje) {
+            const hAtual = agora.getHours(),
+              mAtual = agora.getMinutes();
+            disponiveis = disponiveis.filter((s) => {
+              const [h, m] = s.split(":").map(Number);
+              return h > hAtual || (h === hAtual && m > mAtual);
+            });
+          }
+
+          if (disponiveis.length > 0) {
+            hourSelect.innerHTML = disponiveis
+              .map((hora) => `<option value="${hora}">${hora}</option>`)
+              .join("");
+            hourSelect.disabled = false;
+            feedback.classList.add("hidden");
+          } else {
+            throw new Error("Sem horários disponíveis para este dia.");
+          }
+        } catch (error) {
+          console.error(error);
+          hourSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+          hourSelect.disabled = true;
+          showFeedback(
+            `Erro: ${error.message}`,
+            "bg-rose-500/15 text-rose-100 border border-rose-400/20",
+          );
+        }
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!hourSelect.value) {
+          showFeedback(
+            "Por favor, selecione um horário válido.",
+            "bg-amber-400/15 text-amber-100 border border-amber-400/20",
+          );
+          return;
+        }
+
+        const payload = {
+          nome: document.getElementById("nome").value,
+          telefone: document.getElementById("telefone").value,
+          placa: document.getElementById("placa").value,
+          data: dateInput.value,
+          hora: hourSelect.value,
+        };
+
+        setLoading(true);
+
+        try {
+          const placaID = payload.placa.toUpperCase().replace(/\s+/g, "");
+
+          // Usa o .doc(placaID).set(...) para substituir se já existir
+          await db
+            .collection("agendamento instalação placas")
+            .doc(placaID)
+            .set({
+              clienteNome: payload.nome.trim(),
+              clienteTelefone: payload.telefone.trim(),
+              placa: placaID,
+              data: payload.data,
+              hora: payload.hora,
+              status: "agendado",
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+          // Cria uma notificação para o painel ADM
+          await db.collection("notificacoes").add({
+            titulo: "Novo agendamento recebido",
+            mensagem: `${payload.nome} agendou para ${payload.data} às ${payload.hora}.`,
+            lida: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+
+          exibirSucesso({ ...payload, placa: placaID });
+        } catch (error) {
+          showFeedback(
+            `Erro ao agendar: ${error.message}`,
+            "bg-rose-500/15 text-rose-100 border border-rose-400/20",
+          );
+        } finally {
+          setLoading(false);
+        }
+      });
+    </script>
+  </body>
+</html>

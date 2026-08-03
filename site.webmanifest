@@ -1,0 +1,17 @@
+{
+  "name": "LG Placas Automotivas",
+  "short_name": "LG Placas",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#1d4ed8",
+  "icons": [
+    {
+      "src": "/imagens/logo-lgplacas-circulo.png",
+      "sizes": "3641x3642",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
