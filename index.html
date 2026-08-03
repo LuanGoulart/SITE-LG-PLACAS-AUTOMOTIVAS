@@ -506,6 +506,7 @@
           <a href="#servicos" class="hover:text-blue-400 transition"
             >Serviços</a
           >
+          <a href="#parceiros" class="hover:text-blue-400 transition">Parceiros</a>
           <a href="#regiao" class="hover:text-blue-400 transition">Região</a>
           <a href="#faq" class="hover:text-blue-400 transition">FAQ</a>
           <a
@@ -532,6 +533,7 @@
       <li><a href="#produtos" class="block py-2">Produtos</a></li>
       <li><a href="#sobre" class="block py-2">Sobre</a></li>
       <li><a href="#servicos" class="block py-2">Serviços</a></li>
+      <li><a href="#parceiros" class="block py-2">Parceiros</a></li>
       <li><a href="#regiao" class="block py-2">Região</a></li>
       <li><a href="#faq" class="block py-2">FAQ</a></li>
       <li>
@@ -1162,6 +1164,75 @@
       </div>
     </section>
 
+    <section id="parceiros" class="py-24 md:py-28 bg-white scroll-mt-28">
+      <div class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5">
+        <div class="max-w-3xl mx-auto text-center mb-12">
+          <span class="inline-flex rounded-full bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700">Parceiros</span>
+          <h2 class="text-3xl md:text-4xl font-bold mt-5 mb-4">Quem caminha com a LG Placas</h2>
+          <p class="text-slate-600 leading-relaxed">
+            Conheça parceiros que ajudam nossos clientes a deixar a documentação e o emplacamento em dia.
+          </p>
+        </div>
+
+        <div class="flex justify-center">
+          <article class="w-full max-w-[410px] rounded-3xl border border-slate-200 bg-slate-50 p-3 sm:p-5 shadow-sm">
+            <div class="flex items-center justify-between gap-4 mb-4">
+              <div>
+                <p class="text-sm font-bold text-blue-700">Parceiro em destaque</p>
+                <h3 class="text-xl font-bold text-slate-900">Luan Goulart Despachante</h3>
+              </div>
+              <a
+                href="https://www.instagram.com/luangoulartdesp/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="shrink-0 rounded-full bg-slate-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-700"
+              >Ver perfil</a>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a
+                href="https://wa.me/5535999792207?text=Ol%C3%A1!%20Entrei%20em%20contato%20atrav%C3%A9s%20do%20site%20da%20LG%20Placas%20Automotivas%20e%20gostaria%20de%20falar%20com%20o%20Luan%20Goulart%20Despachante."
+                target="_blank"
+                rel="noopener noreferrer"
+                onclick="trackWhatsAppClick('Luan Goulart Despachante')"
+                class="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-emerald-500"
+              >Chamar Luan no WhatsApp</a>
+            </div>
+            <div
+              data-partner-posts
+              class="flex overflow-x-auto snap-x snap-mandatory rounded-2xl [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              aria-label="Publicações de Luan Goulart Despachante"
+            >
+              <div class="min-w-full snap-center">
+                <blockquote
+                  class="instagram-media"
+                  data-instgrm-permalink="https://www.instagram.com/p/DE4r3ywJjA-/"
+                  data-instgrm-version="14"
+                  style="background:#FFF; border:0; border-radius:12px; box-shadow:0 1px 10px rgba(0,0,0,.12); margin:0 auto; max-width:390px; min-width:326px; padding:0; width:100%;"
+                ></blockquote>
+              </div>
+              <div class="min-w-full snap-center">
+                <blockquote
+                  class="instagram-media"
+                  data-instgrm-permalink="https://www.instagram.com/p/DM7KOw3MTTa/"
+                  data-instgrm-version="14"
+                  style="background:#FFF; border:0; border-radius:12px; box-shadow:0 1px 10px rgba(0,0,0,.12); margin:0 auto; max-width:390px; min-width:326px; padding:0; width:100%;"
+                ></blockquote>
+              </div>
+              <div class="min-w-full snap-center">
+                <blockquote
+                  class="instagram-media"
+                  data-instgrm-permalink="https://www.instagram.com/p/DDenXyIsiVU/"
+                  data-instgrm-version="14"
+                  style="background:#FFF; border:0; border-radius:12px; box-shadow:0 1px 10px rgba(0,0,0,.12); margin:0 auto; max-width:390px; min-width:326px; padding:0; width:100%;"
+                ></blockquote>
+              </div>
+            </div>
+          </article>
+        </div>
+        <p class="mt-4 text-center text-sm text-slate-500">As publicações mudam automaticamente. Você também pode deslizar para navegar.</p>
+      </div>
+    </section>
+
     <section id="servicos" class="py-24 md:py-32 bg-slate-50">
       <div class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5">
         <h2
@@ -1424,6 +1495,21 @@
           closeMobileMenu();
         }
       });
+
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.querySelectorAll("[data-partner-posts]").forEach((carousel) => {
+          let currentSlide = 0;
+          const slides = carousel.children;
+
+          window.setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            carousel.scrollTo({
+              left: carousel.clientWidth * currentSlide,
+              behavior: "smooth",
+            });
+          }, 5500);
+        });
+      }
     </script>
 
     <div id="lightbox" class="lightbox-overlay" aria-hidden="true">
@@ -1438,6 +1524,111 @@
         <img id="lightbox-img" src="" alt="Imagem ampliada" />
       </div>
     </div>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyAT47ETWKHfHGya_rk76YrRqBPO7aI3N0Y",
+        authDomain: "instagramapp-34791.firebaseapp.com",
+        databaseURL: "https://instagramapp-34791-default-rtdb.firebaseio.com",
+        projectId: "instagramapp-34791",
+        storageBucket: "instagramapp-34791.appspot.com",
+        messagingSenderId: "749418759280",
+        appId: "1:749418759280:web:758c036737c686152f20b5",
+        measurementId: "G-5FDLV6V8RR",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      let partnerViewTracked = false;
+
+      function trackWhatsAppClick(partnerName) {
+        if (!db || !partnerName) return;
+
+        try {
+          db.collection("parceiros_site_lgplacas")
+            .doc("dados")
+            .collection("whatsapp_clicks")
+            .add({
+            partner: partnerName,
+            page: window.location.pathname,
+            source: "site",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        } catch (error) {
+          console.warn("Tracking WhatsApp click failed:", error);
+        }
+      }
+
+      function trackPartnerSectionView(sectionName) {
+        if (!db || !sectionName || partnerViewTracked) return;
+        partnerViewTracked = true;
+
+        try {
+          db.collection("parceiros_site_lgplacas")
+            .doc("dados")
+            .collection("partner_views")
+            .add({
+            section: sectionName,
+            partner: "Luan Goulart Despachante",
+            page: window.location.pathname,
+            source: "site",
+            viewedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        } catch (error) {
+          console.warn("Tracking partner section view failed:", error);
+        }
+      }
+
+      function isElementInView(el) {
+        const rect = el.getBoundingClientRect();
+        return rect.top < window.innerHeight && rect.bottom > 0;
+      }
+
+      function observePartnerSection() {
+        const target = document.getElementById("parceiros");
+        if (!target) return;
+
+        const checkView = () => {
+          if (partnerViewTracked) return;
+          const rect = target.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            trackPartnerSectionView("parceiros");
+          }
+        };
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                checkView();
+              }
+            });
+          },
+          { threshold: [0.1, 0.25, 0.5] },
+        );
+
+        observer.observe(target);
+        window.addEventListener("scroll", checkView, { passive: true });
+        window.addEventListener("resize", checkView);
+        window.addEventListener("load", checkView);
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") {
+            checkView();
+          }
+        });
+        requestAnimationFrame(checkView);
+        setTimeout(checkView, 500);
+        setTimeout(checkView, 1200);
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", observePartnerSection);
+      } else {
+        observePartnerSection();
+      }
+    </script>
+    <script async src="https://www.instagram.com/embed.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

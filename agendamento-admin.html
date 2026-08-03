@@ -114,32 +114,6 @@
       </section>
 
       <section id="adminPanel" class="hidden">
-        <div class="grid gap-4 sm:grid-cols-3">
-          <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
-            <p class="text-xs uppercase tracking-[0.28em] text-slate-400">
-              Total
-            </p>
-            <p id="totalAgendamentos" class="mt-2 text-3xl font-black">0</p>
-            <p class="mt-1 text-sm text-slate-400">Agendamentos cadastrados</p>
-          </div>
-          <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
-            <p class="text-xs uppercase tracking-[0.28em] text-slate-400">
-              Selecionado
-            </p>
-            <p id="agendamentosDia" class="mt-2 text-3xl font-black">0</p>
-            <p class="mt-1 text-sm text-slate-400">
-              Agendamentos do dia clicado
-            </p>
-          </div>
-          <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
-            <p class="text-xs uppercase tracking-[0.28em] text-slate-400">
-              Alertas
-            </p>
-            <p id="notificacoesNaoLidas" class="mt-2 text-3xl font-black">0</p>
-            <p class="mt-1 text-sm text-slate-400">Notificações não lidas</p>
-          </div>
-        </div>
-
         <div class="mt-6 grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
           <div class="glass soft-shadow rounded-3xl p-4 sm:p-5">
             <div
@@ -220,6 +194,34 @@
                 class="hidden px-5 py-10 text-center text-slate-400"
               >
                 Nenhum agendamento neste dia.
+              </div>
+            </div>
+
+            <div class="glass soft-shadow rounded-3xl">
+              <div class="border-b border-white/10 px-4 py-4 sm:px-5">
+                <h3 class="text-lg font-semibold">Todos os agendamentos</h3>
+                <p class="mt-1 text-sm text-slate-400">
+                  Lista completa de todos os registros.
+                </p>
+              </div>
+              <div class="max-h-[32rem] overflow-y-auto overflow-x-auto p-4 sm:p-5">
+                <table class="min-w-full divide-y divide-white/10 text-left text-sm">
+                  <thead class="bg-white/5 text-slate-300">
+                    <tr>
+                      <th class="px-4 py-3 font-semibold">Data</th>
+                      <th class="px-4 py-3 font-semibold">Hora</th>
+                      <th class="px-4 py-3 font-semibold">Cliente</th>
+                      <th class="px-4 py-3 font-semibold">Telefone</th>
+                      <th class="px-4 py-3 font-semibold">Placa</th>
+                      <th class="px-4 py-3 font-semibold">Status</th>
+                      <th class="px-4 py-3 font-semibold">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="appointmentsBody" class="divide-y divide-white/10"></tbody>
+                </table>
+              </div>
+              <div id="emptyAppointments" class="hidden px-4 py-8 text-center text-slate-400">
+                Nenhum agendamento encontrado.
               </div>
             </div>
 
@@ -342,41 +344,91 @@
           </div>
         </div>
 
-        <div class="mt-6 glass soft-shadow rounded-3xl">
-          <div class="border-b border-white/10 px-4 py-4 sm:px-5">
-            <h3 class="text-lg font-semibold">Todos os agendamentos</h3>
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
+            <p class="text-xs uppercase tracking-[0.28em] text-slate-400">
+              Total
+            </p>
+            <p id="totalAgendamentos" class="mt-2 text-3xl font-black">0</p>
+            <p class="mt-1 text-sm text-slate-400">Agendamentos cadastrados</p>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
+            <p class="text-xs uppercase tracking-[0.28em] text-slate-400">
+              Selecionado
+            </p>
+            <p id="agendamentosDia" class="mt-2 text-3xl font-black">0</p>
             <p class="mt-1 text-sm text-slate-400">
-              Atualizado automaticamente quando um cliente agenda.
+              Agendamentos do dia clicado
             </p>
           </div>
-          <div class="overflow-x-auto">
-            <table
-              class="min-w-full divide-y divide-white/10 text-left text-sm"
-            >
-              <thead class="bg-white/5 text-slate-300">
-                <tr>
-                  <th class="px-4 py-3 font-semibold">Data</th>
-                  <th class="px-4 py-3 font-semibold">Hora</th>
-                  <th class="px-4 py-3 font-semibold">Cliente</th>
-                  <th class="px-4 py-3 font-semibold">Telefone</th>
-                  <th class="px-4 py-3 font-semibold">Placa</th>
-                  <th class="px-4 py-3 font-semibold">Status</th>
-                  <th class="px-4 py-3 font-semibold">Ações</th>
-                </tr>
-              </thead>
-              <tbody
-                id="appointmentsBody"
-                class="divide-y divide-white/10"
-              ></tbody>
-            </table>
-          </div>
-          <div
-            id="emptyAppointments"
-            class="hidden px-5 py-10 text-center text-slate-400"
-          >
-            Nenhum agendamento encontrado.
+          <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
+            <p class="text-xs uppercase tracking-[0.28em] text-slate-400">
+              Alertas
+            </p>
+            <p id="notificacoesNaoLidas" class="mt-2 text-3xl font-black">0</p>
+            <p class="mt-1 text-sm text-slate-400">Notificações não lidas</p>
           </div>
         </div>
+
+        <div class="mt-6 glass soft-shadow rounded-3xl p-3">
+          <div class="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+            <div>
+              <h3 class="text-base font-semibold text-white">Visualizações de parceiros</h3>
+              <p class="mt-1 text-xs text-slate-400">Contagem de visualizações ao chegar na seção de parceiros.</p>
+            </div>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2 mt-3">
+            <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-3">
+              <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Total de views</p>
+              <p id="partnerViewsTotal" class="mt-2 text-2xl font-black">0</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-3">
+              <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Hoje</p>
+              <p id="partnerViewsToday" class="mt-2 text-2xl font-black">0</p>
+            </div>
+          </div>
+          <div class="mt-3 rounded-3xl border border-white/10 bg-slate-950/25 p-3 text-slate-300">
+            <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Últimos 7 dias</p>
+            <div id="partnerViewsPeriodChart" class="mt-3 space-y-2 max-h-44 overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <div class="mt-6 glass soft-shadow rounded-3xl p-3">
+          <div class="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+            <div>
+              <h3 class="text-base font-semibold text-white">Cliques no WhatsApp</h3>
+              <p class="mt-1 text-xs text-slate-400">Cliques no botão do parceiro Luan Goulart Despachante.</p>
+            </div>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2 mt-3">
+            <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-3">
+              <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Total de cliques</p>
+              <p id="whatsappClicksTotal" class="mt-2 text-2xl font-black">0</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-slate-950/35 p-3">
+              <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Hoje</p>
+              <p id="whatsappClicksToday" class="mt-2 text-2xl font-black">0</p>
+            </div>
+          </div>
+          <div class="mt-3 grid gap-3 lg:grid-cols-3">
+            <div class="rounded-3xl border border-white/10 bg-slate-950/25 p-3 text-slate-300">
+              <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Cliques por parceiro</p>
+              <div id="whatsappPartnerChart" class="mt-3 space-y-2 max-h-44 overflow-y-auto"></div>
+            </div>
+            <div class="rounded-3xl border border-white/10 bg-slate-950/25 p-3 text-slate-300">
+              <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Cliques por página</p>
+              <div id="whatsappPageChart" class="mt-3 space-y-2 max-h-44 overflow-y-auto"></div>
+            </div>
+            <div class="rounded-3xl border border-white/10 bg-slate-950/25 p-3 text-slate-300">
+              <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Últimos 7 dias</p>
+              <div id="whatsappPeriodChart" class="mt-3 space-y-2 max-h-44 overflow-y-auto"></div>
+            </div>
+          </div>
+          <div id="whatsappClicksChart" class="mt-3 rounded-3xl border border-white/10 bg-slate-950/25 p-3 text-slate-300 max-h-44 overflow-y-auto">
+            <p class="text-sm text-slate-400">Últimos cliques registrados aparecerão aqui.</p>
+          </div>
+        </div>
+
       </section>
     </div>
 
@@ -577,6 +629,16 @@
         "notificacoesNaoLidas",
       );
       const toastStack = document.getElementById("toastStack");
+      const whatsappClicksTotal = document.getElementById("whatsappClicksTotal");
+      const whatsappClicksToday = document.getElementById("whatsappClicksToday");
+      const whatsappPartnerChart = document.getElementById("whatsappPartnerChart");
+      const whatsappPageChart = document.getElementById("whatsappPageChart");
+      const whatsappPeriodChart = document.getElementById("whatsappPeriodChart");
+      const whatsappClicksChart = document.getElementById("whatsappClicksChart");
+      const partnerViewsTotal = document.getElementById("partnerViewsTotal");
+      const partnerViewsToday = document.getElementById("partnerViewsToday");
+      const partnerViewsPeriodChart = document.getElementById("partnerViewsPeriodChart");
+      const partnerViewsRecent = document.getElementById("partnerViewsRecent");
       const calendarGrid = document.getElementById("calendarGrid");
       const calendarLabel = document.getElementById("calendarLabel");
       const selectedDayLabel = document.getElementById("selectedDayLabel");
@@ -698,7 +760,7 @@
         );
 
         appointmentsBody.innerHTML = state.appointments
-          .map(
+          .slice(0, 150).map(
             (item) => `
             <tr class="hover:bg-white/5">
               <td class="px-4 py-3 text-slate-200">${escapeHtml(formatDate(item.data))}</td>
@@ -760,6 +822,191 @@
           "hidden",
           state.notifications.length > 0,
         );
+      }
+
+      function renderWhatsAppMetrics() {
+        const clicks = state.whatsappClicks || [];
+        whatsappClicksTotal.textContent = String(clicks.length);
+
+        const todayIso = getLocalISODate(new Date());
+        const todayCount = clicks.filter((item) => {
+          let createdAt = item.createdAt;
+          if (!createdAt) return false;
+          if (createdAt.toDate) {
+            createdAt = createdAt.toDate();
+          } else if (createdAt.seconds) {
+            createdAt = new Date(createdAt.seconds * 1000);
+          } else {
+            createdAt = new Date(createdAt);
+          }
+          return getLocalISODate(createdAt) === todayIso;
+        }).length;
+
+        whatsappClicksToday.textContent = String(todayCount);
+
+        const partnerCounts = clicks.reduce((acc, item) => {
+          const key = item.partner || "WhatsApp direto";
+          acc[key] = (acc[key] || 0) + 1;
+          return acc;
+        }, {});
+
+        const pageCounts = clicks.reduce((acc, item) => {
+          const key = item.page || "/";
+          acc[key] = (acc[key] || 0) + 1;
+          return acc;
+        }, {});
+
+        function renderCountBars(counts) {
+          const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+          if (!entries.length) return "<p class=\"text-sm text-slate-400\">Sem dados para exibir.</p>";
+          const max = entries[0][1];
+          return entries
+            .map(
+              ([label, count]) => `
+              <div class="space-y-2">
+                <div class="flex items-center justify-between gap-4 text-xs uppercase tracking-[0.22em] text-slate-400">
+                  <span class="truncate">${escapeHtml(label)}</span>
+                  <span class="font-semibold text-white">${count}</span>
+                </div>
+                <div class="h-3 overflow-hidden rounded-full bg-slate-900/60">
+                  <div class="h-full rounded-full bg-emerald-500" style="width: ${max ? (count / max) * 100 : 0}%"></div>
+                </div>
+              </div>
+            `,
+            )
+            .join("");
+        }
+
+        whatsappPartnerChart.innerHTML = renderCountBars(partnerCounts);
+        whatsappPageChart.innerHTML = renderCountBars(pageCounts);
+
+        const periodDays = Array.from({ length: 7 }, (_, index) => {
+          const date = new Date();
+          date.setDate(date.getDate() - (6 - index));
+          return getLocalISODate(date);
+        });
+
+        const periodCounts = periodDays.map((date) => ({
+          date,
+          count: clicks.filter((item) => {
+            let createdAt = item.createdAt;
+            if (!createdAt) return false;
+            if (createdAt.toDate) createdAt = createdAt.toDate();
+            else if (createdAt.seconds) createdAt = new Date(createdAt.seconds * 1000);
+            else createdAt = new Date(createdAt);
+            return getLocalISODate(createdAt) === date;
+          }).length,
+        }));
+
+        const periodMax = Math.max(...periodCounts.map((item) => item.count), 1);
+        whatsappPeriodChart.innerHTML = periodCounts
+          .map(
+            (item) => `
+            <div>
+              <div class="flex items-center justify-between gap-4 text-xs uppercase tracking-[0.22em] text-slate-400">
+                <span>${escapeHtml(formatDate(item.date))}</span>
+                <span class="font-semibold text-white">${item.count}</span>
+              </div>
+              <div class="h-3 overflow-hidden rounded-full bg-slate-900/60">
+                <div class="h-full rounded-full bg-sky-400" style="width: ${(
+                  (item.count / periodMax) * 100
+                ).toFixed(2)}%"></div>
+              </div>
+            </div>
+          `,
+          )
+          .join("");
+
+        const recent = clicks.slice(0, 5).map((item) => {
+          let createdAt = item.createdAt;
+          if (createdAt?.toDate) {
+            createdAt = createdAt.toDate();
+          } else if (createdAt?.seconds) {
+            createdAt = new Date(createdAt.seconds * 1000);
+          }
+          const dateLabel = createdAt ? formatDateTime(createdAt) : "Sem horário";
+          return `
+            <div class="rounded-2xl border border-white/10 bg-slate-950/20 p-3">
+              <p class="text-sm font-semibold text-white">${escapeHtml(item.partner || item.page || "Clique WhatsApp")}</p>
+              <p class="mt-1 text-xs text-slate-400">${escapeHtml(item.page || "")}</p>
+              <p class="mt-2 text-[11px] uppercase tracking-[0.22em] text-slate-500">${escapeHtml(dateLabel)}</p>
+            </div>
+          `;
+        }).join("");
+
+        whatsappClicksChart.innerHTML = recent || '<p class="text-sm text-slate-400">Nenhum clique registrado ainda.</p>';
+      }
+
+      function renderPartnerViews() {
+        const views = state.partnerViews || [];
+        partnerViewsTotal.textContent = String(views.length);
+
+        const todayIso = getLocalISODate(new Date());
+        const todayCount = views.filter((item) => {
+          let viewedAt = item.viewedAt;
+          if (!viewedAt) return false;
+          if (viewedAt.toDate) viewedAt = viewedAt.toDate();
+          else if (viewedAt.seconds) viewedAt = new Date(viewedAt.seconds * 1000);
+          else viewedAt = new Date(viewedAt);
+          return getLocalISODate(viewedAt) === todayIso;
+        }).length;
+
+        partnerViewsToday.textContent = String(todayCount);
+
+        const periodDays = Array.from({ length: 7 }, (_, index) => {
+          const date = new Date();
+          date.setDate(date.getDate() - (6 - index));
+          return getLocalISODate(date);
+        });
+
+        const periodCounts = periodDays.map((date) => ({
+          date,
+          count: views.filter((item) => {
+            let viewedAt = item.viewedAt;
+            if (!viewedAt) return false;
+            if (viewedAt.toDate) viewedAt = viewedAt.toDate();
+            else if (viewedAt.seconds) viewedAt = new Date(viewedAt.seconds * 1000);
+            else viewedAt = new Date(viewedAt);
+            return getLocalISODate(viewedAt) === date;
+          }).length,
+        }));
+
+        const periodMax = Math.max(...periodCounts.map((item) => item.count), 1);
+        partnerViewsPeriodChart.innerHTML = periodCounts
+          .map(
+            (item) => `
+            <div>
+              <div class="flex items-center justify-between gap-4 text-xs uppercase tracking-[0.22em] text-slate-400">
+                <span>${escapeHtml(formatDate(item.date))}</span>
+                <span class="font-semibold text-white">${item.count}</span>
+              </div>
+              <div class="h-3 overflow-hidden rounded-full bg-slate-900/60">
+                <div class="h-full rounded-full bg-blue-500" style="width: ${(
+                  (item.count / periodMax) * 100
+                ).toFixed(2)}%"></div>
+              </div>
+            </div>
+          `,
+          )
+          .join("");
+
+        partnerViewsRecent.innerHTML = views
+          .slice(0, 5)
+          .map((item) => {
+            let viewedAt = item.viewedAt;
+            if (viewedAt?.toDate) viewedAt = viewedAt.toDate();
+            else if (viewedAt?.seconds) viewedAt = new Date(viewedAt.seconds * 1000);
+            else viewedAt = new Date(viewedAt);
+            const dateLabel = viewedAt ? formatDateTime(viewedAt) : "Sem horário";
+            return `
+              <div class="rounded-2xl border border-white/10 bg-slate-950/20 p-3">
+                <p class="text-sm font-semibold text-white">${escapeHtml(item.partner || "Parceiros")}</p>
+                <p class="mt-1 text-xs text-slate-400">${escapeHtml(item.section || "parceiros")}</p>
+                <p class="mt-2 text-[11px] uppercase tracking-[0.22em] text-slate-500">${escapeHtml(dateLabel)}</p>
+              </div>
+            `;
+          })
+          .join("");
       }
 
       function renderSelectedDay() {
@@ -1097,6 +1344,32 @@
             });
 
           // Carrega Feriados e Pins
+          const clicksSnap = await db
+            .collection("parceiros_site_lgplacas")
+            .doc("dados")
+            .collection("whatsapp_clicks")
+            .orderBy("createdAt", "desc")
+            .limit(50)
+            .get();
+          state.whatsappClicks = clicksSnap.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          renderWhatsAppMetrics();
+
+          const viewsSnap = await db
+            .collection("parceiros_site_lgplacas")
+            .doc("dados")
+            .collection("partner_views")
+            .orderBy("viewedAt", "desc")
+            .limit(50)
+            .get();
+          state.partnerViews = viewsSnap.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          renderPartnerViews();
+
           const feriados = await db.collection("feriados").get();
           feriados.forEach(
             (doc) => (state.closedByDate[doc.id] = doc.data().descricao),
