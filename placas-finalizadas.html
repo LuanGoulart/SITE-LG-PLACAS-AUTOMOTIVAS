@@ -969,9 +969,7 @@
           // Consulta 2: Coleção 'autorizacoes/placas/dados'
           try {
             const autorizacoesSnapshot = await db
-              .collection("autorizacoes")
-              .doc("placas")
-              .collection("dados")
+              .collection("autorizacoes/placas/dados")
               .get();
             if (!autorizacoesSnapshot.empty) {
               dadosEncontrados = true;
@@ -999,7 +997,6 @@
             if (!agendamentoSnapshot.empty) {
               dadosEncontrados = true;
               agendamentoSnapshot.forEach((doc) => {
-                if (!doc.exists) return;
                 const placa = lerCampoString(doc.data().placa) || doc.id;
                 if (!dadosPlacas[placa]) {
                   // Evita duplicatas
@@ -1033,32 +1030,21 @@
               lerCampoString(dados.data) ||
               lerCampoString(dados.dataCadastro) ||
               "N/A";
-            const statusRaw =
-              lerCampoString(dados.status) ||
-              lerCampoString(dados.finalizada) ||
-              lerCampoString(dados.statusAtual) ||
-              "";
-            const statusNormalized = statusRaw.trim().toLowerCase();
-            const finalizada = /pendente/i.test(statusRaw)
-              ? "Pendente"
-              : /finaliz|conclu|entreg/i.test(statusRaw)
-              ? "Finalizada"
-              : "Finalizada";
+            const status = String(
+              lerCampoString(dados.status) || "",
+            ).toLowerCase();
 
             return {
               placa: placa,
               chassi: lerCampoString(dados.chassi) || "N/A",
-              encaminhante:
-                lerCampoString(dados.encaminhante) ||
-                lerCampoString(dados.responsavel) ||
-                "N/A",
+              encaminhante: lerCampoString("") || "N/A",
               proprietario:
                 lerCampoString(dados.nomeProprietario) ||
                 lerCampoString(dados.proprietario) ||
                 lerCampoString(dados.nome) ||
                 "N/A",
               data: formatarData(dataInicial),
-              finalizada: finalizada,
+              finalizada: "Finalizada",
             };
           }
 
@@ -1214,17 +1200,14 @@
             console.warn("Erro ao ouvir grupo 'placas':", error.message),
         );
 
-        db.collection("autorizacoes")
-          .doc("placas")
-          .collection("dados")
-          .onSnapshot(
-            (snapshot) => carregarDados(),
-            (error) =>
-              console.warn(
-                "Erro ao ouvir 'autorizacoes/placas/dados':",
-                error.message,
-              ),
-          );
+        db.collection("autorizacoes/placas/dados").onSnapshot(
+          (snapshot) => carregarDados(),
+          (error) =>
+            console.warn(
+              "Erro ao ouvir 'autorizacoes/placas/dados':",
+              error.message,
+            ),
+        );
 
         db.collection("agendamento instalação placas").onSnapshot(
           (snapshot) => carregarDados(),
