@@ -1362,7 +1362,6 @@
             .doc("dados")
             .collection("partner_views")
             .orderBy("viewedAt", "desc")
-            .limit(50)
             .get();
           state.partnerViews = viewsSnap.docs.map((doc) => ({
             id: doc.id,

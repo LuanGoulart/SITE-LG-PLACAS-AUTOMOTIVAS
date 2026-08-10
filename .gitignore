@@ -1,0 +1,6 @@
+# Arquivos de ambiente
+.env
+firebase_service_account.json
+
+# Cache do Python
+__pycache__/
