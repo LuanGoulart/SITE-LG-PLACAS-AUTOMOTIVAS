@@ -391,10 +391,6 @@
             <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Últimos 7 dias</p>
             <div id="partnerViewsPeriodChart" class="mt-3 space-y-2 max-h-44 overflow-y-auto"></div>
           </div>
-          <div class="mt-3 rounded-3xl border border-white/10 bg-slate-950/25 p-3 text-slate-300">
-            <p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Últimas visualizações</p>
-            <div id="partnerViewsRecent" class="mt-3 space-y-2 max-h-44 overflow-y-auto"></div>
-          </div>
         </div>
 
         <div class="mt-6 glass soft-shadow rounded-3xl p-3">
@@ -642,7 +638,7 @@
       const partnerViewsTotal = document.getElementById("partnerViewsTotal");
       const partnerViewsToday = document.getElementById("partnerViewsToday");
       const partnerViewsPeriodChart = document.getElementById("partnerViewsPeriodChart");
-      const partnerViewsRecent = document.getElementById("partnerViewsRecent"); // Inicialização adicionada/corrigida
+      const partnerViewsRecent = document.getElementById("partnerViewsRecent");
       const calendarGrid = document.getElementById("calendarGrid");
       const calendarLabel = document.getElementById("calendarLabel");
       const selectedDayLabel = document.getElementById("selectedDayLabel");
@@ -1184,6 +1180,11 @@
           return acc;
         }, {});
 
+        const appointmentsByDate = state.appointments.reduce((acc, item) => {
+          (acc[item.data] = acc[item.data] || []).push(item);
+          return acc;
+        }, {});
+
         const cells = [];
         for (let i = 0; i < 42; i += 1) {
           const dayNumber = i - firstDay + 1;
@@ -1203,6 +1204,9 @@
           const isSelected = iso === selectedDate;
           const isToday = iso === todayIso;
           const count = counts[iso] || 0;
+          const dayAppointments = (appointmentsByDate[iso] || []).sort((a, b) =>
+            String(a.hora).localeCompare(String(b.hora)),
+          );
 
           const classes = [
             "min-h-[4.75rem] rounded-2xl border p-3 text-left transition hover:-translate-y-0.5 hover:border-sky-400/40 hover:bg-white/5",

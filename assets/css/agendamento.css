@@ -1,0 +1,592 @@
+/*
+  Estilos para a página de Agendamento de Cliente (agendamento-cliente.html)
+*/
+
+/* 
+  :root é onde definimos "variáveis" de CSS. 
+  Isso ajuda a reutilizar cores e valores, facilitando a manutenção.
+  --panel: cor de fundo dos painéis com transparência.
+  --line: cor das bordas/linhas.
+*/
+:root {
+  --panel: rgba(15, 23, 42, 0.72);
+  --line: rgba(148, 163, 184, 0.18);
+}
+
+/* 
+  Estilo do corpo (body) da página.
+  Aqui é definido o fundo com um gradiente complexo para dar um efeito visual moderno.
+  São 3 gradientes sobrepostos: dois radiais nos cantos e um linear de cima para baixo.
+*/
+body {
+  min-height: 100vh;
+  color: #f1f5f9; /* text-slate-100 */
+  background:
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(236, 72, 153, 0.18),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 90% 30%,
+      rgba(219, 39, 119, 0.15),
+      transparent 30%
+    ),
+    linear-gradient(180deg, #020617 0%, #0f172a 50%, #111827 100%);
+}
+
+/* Contêiner principal da página */
+.main-container {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 64rem; /* max-w-5xl */
+  margin: 0 auto;
+  padding: 2rem 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .main-container { padding: 2rem 1rem; }
+}
+@media (min-width: 1024px) {
+  .main-container { padding: 2rem 1.25rem; }
+}
+
+/* 
+  Estilo principal do contêiner do agendamento.
+  Usa as variáveis que definimos no :root.
+  'backdrop-filter: blur(18px)' cria o efeito de vidro fosco (glassmorphism).
+*/
+.appointment-shell {
+  width: 100%;
+  border-radius: 1.5rem; /* rounded-3xl */
+  padding: 1.25rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+/* 
+  Classe para uma sombra suave.
+  Usada para dar profundidade aos painéis.
+*/
+/* 
+  Classe para uma sombra suave.
+  Usada para dar profundidade aos painéis.
+*/
+.soft-shadow {
+  box-shadow: 0 24px 80px rgba(2, 6, 23, 0.42);
+}
+
+/* --- Estilos do Cabeçalho --- */
+.header-content {
+  margin-bottom: 1.5rem;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.agenda-badge {
+  display: none; /* hidden by default */
+  border-radius: 9999px;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  background-color: rgba(74, 222, 128, 0.1);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #a7f3d0;
+}
+
+@media (min-width: 640px) {
+  .agenda-badge { display: inline-flex; }
+}
+
+.header-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .header-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: end;
+  }
+}
+
+.header-grid h1 {
+  margin-top: 0.75rem;
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 900;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 640px) {
+  .header-grid h1 { font-size: 3rem; } /* sm:text-5xl */
+}
+
+.header-grid p {
+  margin-top: 0.75rem;
+  max-width: 42rem;
+  line-height: 1.625;
+  color: #cbd5e1; /* text-slate-300 */
+}
+
+.atendimento-info {
+  margin-top: 1.25rem;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  background-color: rgba(56, 189, 248, 0.1);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #e0f2fe;
+}
+
+.atendimento-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(186, 230, 253, 0.9);
+}
+
+.vantagens-box {
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(2, 6, 23, 0.35);
+  padding: 1.25rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.vantagens-box p {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: #6ee7b7;
+}
+
+.vantagens-list {
+  margin-top: 1rem;
+  list-style: none;
+  font-size: 0.875rem;
+  color: #e2e8f0;
+}
+
+.vantagens-list li {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.vantagens-list span {
+  margin-top: 0.25rem;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  background-color: #34d399; /* bg-emerald-400 */
+}
+
+/* 
+  Estilo do botão "Voltar ao site".
+  Define aparência, espaçamento e efeito de transição.
+*/
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+/* Efeito ao passar o mouse sobre o botão "Voltar" */
+.back-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* --- Estilos do Formulário --- */
+.form-container {
+  display: grid;
+  gap: 1rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  background-color: rgba(2, 6, 23, 0.3);
+  padding: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(14, 116, 144, 0.3);
+}
+
+@media (min-width: 640px) {
+  .form-container { padding: 1.25rem; }
+}
+
+.form-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .form-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.form-section-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.form-input {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(2, 6, 23, 0.4);
+  padding: 0.75rem 1rem;
+  color: #f1f5f9;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: rgba(56, 189, 248, 0.5);
+  background-color: rgba(2, 6, 23, 0.6);
+}
+
+.placa-input {
+  font-family: monospace;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+}
+
+.hora-display {
+  cursor: pointer;
+}
+.hora-display:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.info-banner {
+  border-radius: 1rem;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  background-color: rgba(56, 189, 248, 0.08);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #cbd5e1;
+}
+
+.btn-submit {
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background-image: linear-gradient(to right, #0ea5e9, #3b82f6);
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: white;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-submit:hover {
+  filter: brightness(1.1);
+}
+.btn-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.feedback-box {
+  display: none; /* hidden */
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.feedback-box.success {
+  background-color: rgba(74, 222, 128, 0.1);
+  color: #a7f3d0;
+}
+.feedback-box.error {
+  background-color: rgba(244, 63, 94, 0.1);
+  color: #fca5a5;
+}
+.feedback-box.warning {
+  background-color: rgba(251, 191, 36, 0.1);
+  color: #fcd34d;
+}
+
+.consultar-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.btn-link {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.btn-link:hover {
+  color: #38bdf8;
+}
+
+/* 
+  Estilo base para os botões de seleção de horário.
+  Define o visual padrão do botão quando ele está disponível.
+  'transition' garante que as mudanças de cor e borda sejam suaves.
+*/
+.horario-btn {
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 23, 42, 0.4);
+  color: #e2e8f0;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+/* 
+  Efeito ao passar o mouse sobre um botão de horário que NÃO está desabilitado.
+  Muda a cor de fundo e da borda para dar um feedback visual ao usuário.
+*/
+.horario-btn:hover:not(:disabled) {
+  background-color: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* 
+  Estilo para um botão de horário quando ele está desabilitado (ocupado).
+  Deixa o botão acinzentado, com o texto riscado e remove a interação do cursor.
+*/
+.horario-btn:disabled {
+  background-color: rgba(51, 65, 85, 0.5);
+  border-color: rgba(51, 65, 85, 0.7);
+  color: #64748b;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* --- Estilos da Tela de Sucesso --- */
+.success-view {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.success-view > * + * {
+  margin-top: 1.5rem;
+}
+
+.success-view h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #d1fae5;
+}
+
+.resumo-box {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(2, 6, 23, 0.4);
+  padding: 1.25rem;
+  text-align: left;
+}
+
+.resumo-box > p {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.resumo-box .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.resumo-box .grid span:nth-child(odd) {
+  color: #94a3b8;
+}
+.resumo-box .grid span:nth-child(even) {
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.success-details {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.success-details > div + div {
+  margin-top: 1rem;
+}
+
+.success-actions {
+  padding-top: 1.5rem;
+}
+.success-actions > button + button {
+  margin-top: 0.75rem;
+}
+
+.btn-secondary, .btn-tertiary {
+  width: 100%;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  background-color: rgba(56, 189, 248, 0.1);
+  color: #bae6fd;
+}
+.btn-secondary:hover {
+  background-color: rgba(56, 189, 248, 0.2);
+}
+
+.btn-tertiary {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+.btn-tertiary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- Estilos do Modal de Horários --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(2, 6, 23, 0.8);
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 28rem; /* max-w-md */
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.modal-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #e0f2fe;
+}
+.modal-header p {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #cbd5e1;
+}
+
+.horarios-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .horarios-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* 
+  Estilos específicos para impressão.
+  Tudo dentro de '@media print' só é aplicado quando o usuário tenta imprimir a página
+  ou salvar como PDF.
+*/
+@media print {
+  /* Esconde elementos que não devem aparecer no comprovante, como botões e o cabeçalho. */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Muda o fundo do corpo da página para branco e o texto para preto, ideal para impressão. */
+  body {
+    background: #ffffff;
+    color: #000;
+  }
+
+  /* Remove os efeitos de vidro, sombras e fundos dos painéis para uma impressão limpa. */
+  .appointment-shell,
+  #successView,
+  .glass {
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: #000;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* Garante que todo o texto dentro da tela de sucesso seja preto. */
+  #successView * {
+    color: #000 !important;
+  }
+
+  /* Substitui as classes de cor de fundo do Tailwind por cores mais amigáveis para impressão. */
+  #successView .bg-emerald-500\/20 {
+    background-color: #e6f7f0 !important;
+  }
+
+  /* Muda a cor da borda para um cinza claro. */
+  #successView .border-white\/10 {
+    border-color: #ccc !important;
+  }
+  /* Muda o fundo dos campos de resumo para um cinza bem claro. */
+  #successView .bg-slate-950\/40 {
+    background-color: #f8f9fa !important;
+  }
+}

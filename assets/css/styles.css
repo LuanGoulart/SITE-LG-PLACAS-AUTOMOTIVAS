@@ -1,0 +1,290 @@
+﻿﻿﻿﻿.map-container iframe {
+  width: 100%;
+  height: 300px;
+  border: 0;
+}
+
+.color-control {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.color-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #1d4ed0;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.color-toggle:hover {
+  background: #3b82f6;
+}
+
+h2 {
+  color: #1d4ed0;
+}
+
+.service-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  box-shadow: 0 4px 10px rgba(53, 35, 131, 0.15);
+}
+
+/* Lightbox */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 9999;
+}
+
+.lightbox-content {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -6px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 9999px;
+  width: 40px;
+  height: 40px;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.lightbox-overlay img {
+  max-width: min(96vw, 1000px);
+  max-height: 88vh;
+  border-radius: 10px;
+  cursor: zoom-out;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+  animation: zoomIn 0.2s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.zoom-hover {
+  cursor: zoom-in;
+  transition: transform 0.22s ease;
+  transform-origin: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .zoom-hover:hover {
+    transform: scale(1.08);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .zoom-hover:active {
+    transform: scale(1.03);
+  }
+
+  .lightbox-overlay {
+    padding: 10px;
+  }
+
+  .lightbox-close {
+    top: 8px;
+    right: 8px;
+  }
+
+  .lightbox-overlay img {
+    max-width: 100%;
+    max-height: 82vh;
+  }
+}
+
+/* Garante o degradê principal da hero em qualquer dispositivo */
+#home {
+  background: radial-gradient(circle at top, #2563eb 0%, #00040a 78%) !important;
+}
+
+@media (max-width: 768px) {
+  #home {
+    background: radial-gradient(circle at 50% 0%, #2563eb 0%, #00040a 82%) !important;
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Ensure Instagram embeds are fully responsive */
+.instagram-media {
+  max-width: 100% !important;
+  width: 100% !important;
+  min-width: unset !important; /* Remove any potential default min-width */
+}
+
+/* Target the iframe inside the Instagram embed if it's causing issues */
+.instagram-media iframe {
+  max-width: 100% !important;
+  width: 100% !important;
+  min-width: unset !important;
+}
+
+/* Single Card Product Carousel Styles */
+.product-card-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 480px; /* Largura máxima do card aumentada */
+  height: 350px; /* Altura do card */
+  background-color: #ffffff;
+  border-radius: 1rem; /* rounded-xl */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.product-card-carousel:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+.carousel-image-container {
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8fafc; /* slate-50 */
+  padding: 1rem;
+}
+.carousel-image {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+.carousel-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.carousel-title {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700; /* font-bold */
+  color: #1e293b; /* slate-800 */
+  margin-bottom: 0.5rem;
+}
+.carousel-description {
+  font-size: 0.875rem; /* text-sm */
+  color: #475569; /* slate-600 */
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+.carousel-button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #2563eb; /* blue-600 */
+  color: #ffffff;
+  text-align: center;
+  border-radius: 0.5rem; /* rounded-lg */
+  font-weight: 600; /* font-semibold */
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.carousel-button:hover {
+  background-color: #3b82f6; /* blue-500 */
+}
+.carousel-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+.carousel-nav-button:hover {
+  opacity: 1;
+}
+.carousel-nav-button.prev {
+  left: -20px;
+}
+.carousel-nav-button.next {
+  right: -20px;
+}
+.carousel-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+.indicator-dot {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.indicator-dot.active {
+  background-color: #2563eb; /* blue-600 */
+}

@@ -13,7 +13,7 @@
     />
     <meta
       name="description"
-      content="Placas Mercosul em Itajubá MG com atendimento para todo Minas Gerais. Placa para carro, moto, primeiro emplacamento, transferência, placa perdida, extravio e QR Code danificado."
+      content="Placas Mercosul em Itajubá MG para carro, moto, 1º emplacamento, transferência, 2ª via (perdida, furtada, danificada). Atendimento em Itajubá e todo MG."
     />
     <meta name="author" content="LG Placas Automotivas" />
     <meta name="format-detection" content="telephone=yes" />
@@ -77,8 +77,8 @@
     />
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="produtos.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/produtos.css" />
 
     <style>
       :root {
@@ -306,6 +306,7 @@
       .region-pill {
         border-radius: 8px;
         border: 1px solid rgba(148, 163, 184, 0.35);
+        word-break: break-word; /* Ensures long city names wrap on small screens */
         background: rgba(255, 255, 255, 0.08);
         color: #e2e8f0;
         padding: 12px 14px;
@@ -490,7 +491,7 @@
 
     <nav class="glass-nav text-white shadow-lg sticky top-0 z-50">
       <div
-        class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5 flex justify-between h-24 items-center"
+        class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5 flex justify-between h-16 items-center"
       >
         <div class="flex items-center space-x-2">
           <span class="text-2xl font-extrabold tracking-tighter uppercase"
@@ -527,7 +528,7 @@
 
     <ul
       id="menu-mobile"
-      class="hidden fixed top-20 left-0 right-0 z-[60] flex-col bg-slate-900/95 text-white px-5 py-4 space-y-4 md:hidden border-t border-slate-800 shadow-2xl backdrop-blur-sm max-h-[calc(100vh-5rem)] overflow-y-auto"
+      class="hidden fixed top-16 left-0 right-0 z-[60] flex-col bg-slate-900/95 text-white px-5 py-4 space-y-4 md:hidden border-t border-slate-800 shadow-2xl backdrop-blur-sm max-h-[calc(100vh-4rem)] overflow-y-auto"
     >
       <li><a href="#home" class="block py-2">Início</a></li>
       <li><a href="#produtos" class="block py-2">Produtos</a></li>
@@ -558,11 +559,28 @@
           alt="LG Placas Automotivas"
           class="mx-auto mb-8 w-72 md:w-[760px] no-lightbox drop-shadow-2xl"
         />
+        <!-- The P tag moved here, below the logo and above the H1 -->
         <p
           class="inline-flex mb-5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-blue-100 backdrop-blur"
         >
-          Estampadora em Itajubá MG com atendimento para todo Minas Gerais
+          Estampadora em Itajubá MG com atendimento para todo estado de Minas Gerais
         </p>
+
+        <!-- Single Card Product Carousel - MOVED HERE, BELOW THE LOGO AND THE P TAG
+        <div id="productCarouselCard" class="product-card-carousel mx-auto mb-8">
+          <div class="carousel-image-container">
+            <img id="carouselImage" class="carousel-image" src="" alt="" />
+          </div>
+          <div class="carousel-content">
+            <h3 id="carouselTitle" class="carousel-title"></h3>
+            <p id="carouselDescription" class="carousel-description"></p>
+            <a id="carouselLink" class="carousel-button" href="#">Ver Detalhes</a>
+          </div>
+          <button id="prevBtn" class="carousel-nav-button prev">&#10094;</button>
+          <button id="nextBtn" class="carousel-nav-button next">&#10095;</button>
+          <div id="carouselIndicators" class="carousel-indicators"></div>
+        </div>  -->
+
         <h1
           class="text-4xl md:text-6xl font-black mb-6 leading-tight tracking-tight"
         >
@@ -610,7 +628,6 @@
         </div>
       </div>
     </section>
-
     <section class="py-16 bg-white border-b border-slate-200">
       <div class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5">
         <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
@@ -814,7 +831,7 @@
             <div class="p-8 flex flex-col flex-grow">
               <h3 class="text-xl font-bold mb-3">Placas Especiais</h3>
               <p class="text-slate-600 mb-6 italic text-sm">
-                Para colecionadoress e veículos específicos.
+                Para colecionadores e veículos específicos.
               </p>
               <ul class="space-y-2 mb-8 text-slate-700 text-sm">
                 <li class="flex items-center">
@@ -882,7 +899,7 @@
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">Suportes de Placa</h2>
           <p class="text-slate-600 max-w-2xl mx-auto">
-            Modelos para carro e moto com encaixe firme e acabamento duravel.
+            Modelos para carro e moto com encaixe firme e acabamento durável.
             Passe o mouse para ampliar e clique para abrir em tela cheia.
           </p>
           <div class="h-1 w-20 bg-blue-600 mx-auto mt-5"></div>
@@ -1167,26 +1184,26 @@
     <section id="parceiros" class="py-24 md:py-28 bg-white scroll-mt-28">
       <div class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5">
         <div class="max-w-3xl mx-auto text-center mb-12">
-          <span class="inline-flex rounded-full bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700">Parceiros</span>
+          <span class="inline-flex rounded-full bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700">Nossos Parceiros</span>
           <h2 class="text-3xl md:text-4xl font-bold mt-5 mb-4">Quem caminha com a LG Placas</h2>
           <p class="text-slate-600 leading-relaxed">
-            Conheça parceiros que ajudam nossos clientes a deixar a documentação e o emplacamento em dia.
+            Conheça os parceiros que confiam e caminham junto com a gente.
           </p>
         </div>
 
-        <div class="flex justify-center">
+        <div class="flex justify-center gap-8">
           <article class="w-full max-w-[410px] rounded-3xl border border-slate-200 bg-slate-50 p-3 sm:p-5 shadow-sm">
             <div class="flex items-center justify-between gap-4 mb-4">
               <div>
                 <p class="text-sm font-bold text-blue-700">Parceiro em destaque</p>
                 <h3 class="text-xl font-bold text-slate-900">Luan Goulart Despachante</h3>
               </div>
-              <a
+              <!--<a
                 href="https://www.instagram.com/luangoulartdesp/"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="shrink-0 rounded-full bg-slate-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-700"
-              >Ver perfil</a>
+              >Ver perfil</a> -->
             </div>
             <div class="mt-4 flex flex-wrap gap-3">
               <a
@@ -1199,7 +1216,7 @@
             </div>
             <div
               data-partner-posts
-              class="flex overflow-x-auto snap-x snap-mandatory rounded-2xl [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              class="flex overflow-x-auto snap-x snap-mandatory rounded-2xl"
               aria-label="Publicações de Luan Goulart Despachante"
             >
               <div class="min-w-full snap-center">
@@ -1207,7 +1224,7 @@
                   class="instagram-media"
                   data-instgrm-permalink="https://www.instagram.com/p/DE4r3ywJjA-/"
                   data-instgrm-version="14"
-                  style="background:#FFF; border:0; border-radius:12px; box-shadow:0 1px 10px rgba(0,0,0,.12); margin:0 auto; max-width:390px; min-width:326px; padding:0; width:100%;"
+                  style="background:#FFF; border:0; border-radius:12px; box-shadow:0 1px 10px rgba(0,0,0,.12); margin:0 auto; max-width:390px; padding:0; width:100%;"
                 ></blockquote>
               </div>
               <div class="min-w-full snap-center">
@@ -1215,7 +1232,7 @@
                   class="instagram-media"
                   data-instgrm-permalink="https://www.instagram.com/p/DM7KOw3MTTa/"
                   data-instgrm-version="14"
-                  style="background:#FFF; border:0; border-radius:12px; box-shadow:0 1px 10px rgba(0,0,0,.12); margin:0 auto; max-width:390px; min-width:326px; padding:0; width:100%;"
+                  style="background:#FFF; border:0; border-radius:12px; box-shadow:0 1px 10px rgba(0,0,0,.12); margin:0 auto; max-width:390px; padding:0; width:100%;"
                 ></blockquote>
               </div>
               <div class="min-w-full snap-center">
@@ -1223,9 +1240,28 @@
                   class="instagram-media"
                   data-instgrm-permalink="https://www.instagram.com/p/DDenXyIsiVU/"
                   data-instgrm-version="14"
-                  style="background:#FFF; border:0; border-radius:12px; box-shadow:0 1px 10px rgba(0,0,0,.12); margin:0 auto; max-width:390px; min-width:326px; padding:0; width:100%;"
+                  style="background:#FFF; border:0; border-radius:12px; box-shadow:0 1px 10px rgba(0,0,0,.12); margin:0 auto; max-width:390px; padding:0; width:100%;"
                 ></blockquote>
               </div>
+            </div>
+          </article>
+
+          <!-- Novo Card para Mais Parceiros -->
+          <article class="w-full max-w-[410px] rounded-3xl border border-dashed border-blue-300 bg-blue-50 p-3 sm:p-5 shadow-sm flex flex-col items-center justify-center text-center transition hover:border-blue-500 hover:bg-blue-100">
+            <div class="flex flex-col items-center justify-center h-full">
+              <svg class="w-16 h-16 text-blue-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <h3 class="text-xl font-bold text-blue-700 mb-2">Seja um Parceiro!</h3>
+              <p class="text-slate-600 mb-4">
+                Sua empresa pode fazer parte da nossa rede de parceiros!
+              </p>
+              <a
+                href="https://wa.me/5535998669644?text=Olá! Gostaria de informações sobre como me tornar um parceiro da LG Placas."
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-700"
+              >Fale Conosco</a>
             </div>
           </article>
         </div>
@@ -1304,6 +1340,11 @@
       </div>
     </section>
 
+    <!-- Novo div para a sugestão de geolocalização -->
+    <div id="geolocation-suggestion" class="hidden max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5 text-center mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200 text-blue-800">
+        <!-- Conteúdo será inserido aqui pelo JavaScript -->
+    </div>
+
     <section id="regiao" class="py-24 md:py-28 bg-slate-950 text-white scroll-mt-28">
       <div class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5">
         <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-10 items-start">
@@ -1321,20 +1362,20 @@
             </p>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-            <span class="region-pill">Todo Minas Gerais</span>
-            <span class="region-pill">Itajubá</span>
-            <span class="region-pill">Piranguinho</span>
-            <span class="region-pill">Piranguçu</span>
-            <span class="region-pill">Wenceslau Braz</span>
-            <span class="region-pill">Brasópolis</span>
-            <span class="region-pill">Maria da Fé</span>
-            <span class="region-pill">Pedralva</span>
-            <span class="region-pill">São José do Alegre</span>
-            <span class="region-pill">Marmelópolis</span>
-            <span class="region-pill">Delfim Moreira</span>
-            <span class="region-pill">Virgínia</span>
-            <span class="region-pill">Cristina</span>
-            <span class="region-pill">Paraisópolis</span>
+            <a href="/placas-mercosul-itajuba-regiao.html" class="region-pill" onclick="trackRegionalLinkClick('Todo Minas Gerais')">Todo Minas Gerais</a>
+            <a href="/" class="region-pill" onclick="trackRegionalLinkClick('Itajubá')">Itajubá</a>
+            <a href="/cidades/placas-mercosul-piranguinho.html" class="region-pill" onclick="trackRegionalLinkClick('Piranguinho')">Piranguinho</a>
+            <a href="/cidades/placas-mercosul-pirangucu.html" class="region-pill" onclick="trackRegionalLinkClick('Piranguçu')">Piranguçu</a>
+            <a href="/cidades/placas-mercosul-wenceslau-braz.html" class="region-pill" onclick="trackRegionalLinkClick('Wenceslau Braz')">Wenceslau Braz</a>
+            <a href="/cidades/placas-mercosul-brazopolis.html" class="region-pill" onclick="trackRegionalLinkClick('Brasópolis')">Brasópolis</a>
+            <a href="/cidades/placas-mercosul-maria-da-fe.html" class="region-pill" onclick="trackRegionalLinkClick('Maria da Fé')">Maria da Fé</a>
+            <a href="/cidades/placas-mercosul-pedralva.html" class="region-pill" onclick="trackRegionalLinkClick('Pedralva')">Pedralva</a>
+            <a href="/cidades/placas-mercosul-sao-jose-do-alegre.html" class="region-pill" onclick="trackRegionalLinkClick('São José do Alegre')">São José do Alegre</a>
+            <a href="/cidades/placas-mercosul-marmelopolis.html" class="region-pill" onclick="trackRegionalLinkClick('Marmelópolis')">Marmelópolis</a>
+            <a href="/cidades/placas-mercosul-delfim-moreira.html" class="region-pill" onclick="trackRegionalLinkClick('Delfim Moreira')">Delfim Moreira</a>
+            <a href="/cidades/placas-mercosul-virginia.html" class="region-pill" onclick="trackRegionalLinkClick('Virgínia')">Virgínia</a>
+            <a href="/cidades/placas-mercosul-cristina.html" class="region-pill" onclick="trackRegionalLinkClick('Cristina')">Cristina</a>
+            <a href="/cidades/placas-mercosul-paraisopolis.html" class="region-pill" onclick="trackRegionalLinkClick('Paraisópolis')">Paraisópolis</a>
           </div>
         </div>
       </div>
@@ -1425,23 +1466,23 @@
     </section>
 
     <footer
-      class="text-white py-16 border-t border-slate-800"
+      class="text-white py-5 border-t border-slate-800"
       style="background: linear-gradient(90deg, #1d4ed8, #00040a)"
     >
       <div
-        class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5 text-center md:text-left grid md:grid-cols-2 gap-12"
+        class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5 text-center md:text-left grid md:grid-cols-2 gap-4"
       >
         <div>
-          <span class="text-2xl font-black uppercase tracking-tighter"
+          <span class="text-lg font-black uppercase tracking-tighter"
             >LG<span class="text-blue-300">Placas</span></span
           >
-          <p class="mt-4 text-slate-200 text-sm max-w-sm">
+          <p class="mt-2 text-slate-200 text-xs max-w-sm">
             Estampadora credenciada pelo Detran-MG. Qualidade e rapidez no
             atendimento em Itajubá.
           </p>
         </div>
         <div>
-          <h4 class="font-bold text-slate-100 mb-4 italic">
+          <h4 class="font-bold text-slate-100 mb-2 text-sm italic">
             Cobertura Regional
           </h4>
           <p class="text-slate-300 text-xs leading-relaxed">
@@ -1453,7 +1494,7 @@
         </div>
       </div>
       <div
-        class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5 mt-12 pt-8 border-t border-slate-700/50 text-center text-slate-400 text-xs"
+        class="max-w-[96rem] mx-auto px-3 sm:px-4 lg:px-5 mt-4 pt-3 border-t border-slate-700/50 text-center text-slate-400 text-[11px]"
       >
         © 2026 LG Placas Automotivas. Todos os direitos reservados. 
       </div>
@@ -1622,13 +1663,237 @@
         setTimeout(checkView, 1200);
       }
 
+      // --- Single Card Product Carousel Logic ---
+      const products = [
+        {
+          image: "imagens/img-todas-placas-carro.png",
+          alt: "Placa Mercosul para carro",
+          title: "Placa Carro Mercosul",
+          description: "Emplacamento e regularização para veículos de passeio.",
+          link: "/placa-mercosul-carro-itajuba.html"
+        },
+        {
+          image: "imagens/img-placas-moto.png",
+          alt: "Placa Mercosul para moto",
+          title: "Placa Moto Mercosul",
+          description: "Para motos novas e usadas, com instalação segura.",
+          link: "/placa-mercosul-moto-itajuba.html"
+        },
+        {
+          image: "imagens/img-placas-especiais.png",
+          alt: "Placas especiais",
+          title: "Placas Especiais",
+          description: "Modelos para colecionadores, mini e reduzidas.",
+          link: "/produtos.html#placas-especiais"
+        },
+        {
+          image: "imagens/suporte-carro.png",
+          alt: "Suporte para placa de carro",
+          title: "Suportes de Placa",
+          description: "Suportes duráveis para carro e moto.",
+          link: "/produtos.html#suportes"
+        }
+      ];
+
+      let currentIndex = 0;
+      let autoScrollInterval;
+
+      const carouselImage = document.getElementById('carouselImage');
+      const carouselTitle = document.getElementById('carouselTitle');
+      const carouselDescription = document.getElementById('carouselDescription');
+      const carouselLink = document.getElementById('carouselLink');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const carouselIndicators = document.getElementById('carouselIndicators');
+      const productCarouselCard = document.getElementById('productCarouselCard');
+
+      function updateCarousel() {
+        if (!productCarouselCard) return; // Ensure element exists
+        const product = products[currentIndex];
+        carouselImage.src = product.image;
+        carouselImage.alt = product.alt;
+        carouselTitle.textContent = product.title;
+        carouselDescription.textContent = product.description;
+        carouselLink.href = product.link;
+
+        updateIndicators();
+      }
+
+      function updateIndicators() {
+        if (!carouselIndicators) return; // Ensure element exists
+        carouselIndicators.innerHTML = '';
+        products.forEach((_, index) => {
+          const dot = document.createElement('div');
+          dot.classList.add('indicator-dot');
+          if (index === currentIndex) {
+            dot.classList.add('active');
+          }
+          dot.addEventListener('click', () => {
+            currentIndex = index;
+            updateCarousel();
+            resetAutoScroll();
+          });
+          carouselIndicators.appendChild(dot);
+        });
+      }
+
+      function showNext() {
+        currentIndex = (currentIndex + 1) % products.length;
+        updateCarousel();
+      }
+
+      function showPrev() {
+        currentIndex = (currentIndex - 1 + products.length) % products.length;
+        updateCarousel();
+      }
+
+      function startAutoScroll() {
+        autoScrollInterval = setInterval(showNext, 3000); // Change every 3 seconds
+      }
+
+      function stopAutoScroll() {
+        clearInterval(autoScrollInterval);
+      }
+
+      function resetAutoScroll() {
+        stopAutoScroll();
+        startAutoScroll();
+      }
+      
+      // Auto-scrolling for product carousel
+      document.addEventListener("DOMContentLoaded", () => {
+        const carousel = document.querySelector("#product-carousel .flex");
+        if (carousel) {
+          let scrollInterval;
+          // Calculate scrollAmount based on item width + gap (w-64 = 256px, space-x-4 = 16px)
+          const scrollAmount = 256 + 16; 
+
+          const startScrolling = () => {
+            scrollInterval = setInterval(() => {
+              // If reached end, reset to start
+              if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth) {
+                carousel.scrollTo({ left: 0, behavior: 'smooth' });
+              } else {
+                carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+              }
+            }, 3000); // Scroll every 3 seconds
+          };
+
+          const stopScrolling = () => {
+            clearInterval(scrollInterval);
+          };
+
+          // Pause on hover
+          carousel.addEventListener('mouseenter', stopScrolling);
+          carousel.addEventListener('mouseleave', startScrolling);
+
+          // Start scrolling initially
+          startScrolling();
+        }
+
+        // Initialize single card carousel if it exists
+        if (productCarouselCard) {
+          prevBtn.addEventListener('click', () => { showPrev(); resetAutoScroll(); });
+          nextBtn.addEventListener('click', () => { showNext(); resetAutoScroll(); });
+          productCarouselCard.addEventListener('mouseenter', stopAutoScroll);
+          productCarouselCard.addEventListener('mouseleave', startAutoScroll);
+
+          updateCarousel();
+          startAutoScroll();
+        }
+      });
+
+      // --- Firebase Tracking para Cliques em Links Regionais ---
+      function trackRegionalLinkClick(cityName) {
+          if (!db || !cityName) return;
+
+          try {
+              db.collection("regional_link_clicks").add({
+                  city: cityName,
+                  page: window.location.pathname,
+                  source: "site",
+                  createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+          } catch (error) {
+              console.warn("Tracking regional link click failed:", error);
+          }
+      }
+
+      // --- Geolocalização e Sugestão Dinâmica ---
+      const cityMap = {
+          "itajuba": "/", // Página principal para Itajubá
+          "pouso alegre": "/cidades/placas-mercosul-pouso-alegre.html",
+          "santa rita do sapucai": "/cidades/placas-mercosul-santa-rita-do-sapucai.html",
+          "sao lourenco": "/cidades/placas-mercosul-sao-lourenco.html",
+          "piranguinho": "/cidades/placas-mercosul-piranguinho.html",
+          "pirangucu": "/cidades/placas-mercosul-pirangucu.html",
+          "brazopolis": "/cidades/placas-mercosul-brazopolis.html",
+          "maria da fe": "/cidades/placas-mercosul-maria-da-fe.html",
+          "pedralva": "/cidades/placas-mercosul-pedralva.html",
+          "wenceslau braz": "/cidades/placas-mercosul-wenceslau-braz.html",
+          "sao jose do alegre": "/cidades/placas-mercosul-sao-jose-do-alegre.html",
+          "marmelopolis": "/cidades/placas-mercosul-marmelopolis.html",
+          "delfim moreira": "/cidades/placas-mercosul-delfim-moreira.html",
+          "virginia": "/cidades/placas-mercosul-virginia.html",
+          "cristina": "/cidades/placas-mercosul-cristina.html",
+          "paraisopolis": "/cidades/placas-mercosul-paraisopolis.html",
+          "minas gerais": "/placas-mercosul-itajuba-regiao.html" // Link geral para MG
+          // Adicione mais cidades e seus respectivos links conforme necessário.
+          // As chaves devem ser em minúsculas e sem acentos para facilitar a correspondência.
+      };
+
+      async function showGeolocationSuggestion() {
+          const suggestionDiv = document.getElementById('geolocation-suggestion');
+          if (!suggestionDiv || !navigator.geolocation) {
+              return;
+          }
+
+          navigator.geolocation.getCurrentPosition(async (position) => {
+              const { latitude, longitude } = position.coords;
+              // ATENÇÃO: Para uma geocodificação reversa precisa (coordenadas -> nome da cidade),
+              // você precisaria de uma API de terceiros (ex: Google Maps Geocoding API, OpenStreetMap Nominatim).
+              // A implementação abaixo usa Nominatim, que é um serviço público e pode ter limites de uso.
+              // Para uso em produção, considere uma API com chave e tratamento de erros robusto.
+              let detectedCity = null;
+              try {
+                  const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`);
+                  const data = await response.json();
+                  detectedCity = data?.address?.city || data?.address?.town || data?.address?.village;
+              } catch (error) {
+                  console.warn("Erro ao tentar geocodificação reversa:", error);
+              }
+
+              if (detectedCity) {
+                  const cityKey = detectedCity.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove acentos
+                  const cityLink = cityMap[cityKey];
+
+                  if (cityLink) {
+                      suggestionDiv.innerHTML = `<p class="font-semibold">Você está em <span class="capitalize">${detectedCity}</span>? <a href="${cityLink}" class="underline text-blue-600 hover:text-blue-800" onclick="trackRegionalLinkClick('${detectedCity} - Geolocation Suggestion')">Veja nossos serviços aqui.</a></p>`;
+                      suggestionDiv.classList.remove('hidden');
+                  }
+              }
+          }, (error) => {
+              console.warn("Geolocation failed:", error.message);
+              // Usuário negou a permissão de geolocalização ou houve outro erro.
+              // Neste caso, a sugestão dinâmica não será exibida.
+          }, {
+              enableHighAccuracy: false, // Não precisa de alta precisão para este fim
+              timeout: 5000, // Tenta obter a localização por no máximo 5 segundos
+              maximumAge: 0 // Não usa cache de localização antiga
+          });
+      }
+
+      // Chama a função de sugestão de geolocalização quando a página carregar
+      document.addEventListener("DOMContentLoaded", showGeolocationSuggestion);
+
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", observePartnerSection);
       } else {
         observePartnerSection();
       }
     </script>
+
     <script async src="https://www.instagram.com/embed.js"></script>
-    <script src="script.js"></script>
+    <script src="assets/js/script.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-﻿param(
+﻿﻿param(
   [Parameter(Position = 0)]
   [string]$Message = "atualizacao: $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
 )
@@ -19,7 +19,7 @@ $branch = git rev-parse --abbrev-ref HEAD
 # Inclui arquivos novos, modificados e removidos.
 git add -A
 
-$hasChanges = (git diff --cached --name-only).Length -gt 0
+$hasChanges = @(git diff --cached --name-only).Length -gt 0
 if (-not $hasChanges) {
   Write-Host 'Nenhuma alteracao para publicar.'
   exit 0

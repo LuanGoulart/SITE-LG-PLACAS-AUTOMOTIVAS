@@ -1,0 +1,14 @@
+.cities-intro { margin-bottom: 26px; color: #475569; font-size: 1.05rem; }
+.cities-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
+.city-link { display: block; padding: 16px 18px; border: 1px solid #dbeafe; border-radius: 12px; color: #1d4ed8; background: #fff; font-weight: 800; text-decoration: none; box-shadow: 0 3px 10px rgba(15, 23, 42, .04); }
+.city-link:hover { border-color: #2563eb; background: #eff6ff; }
+.city-link small { display: block; margin-top: 3px; color: #64748b; font-weight: 500; }
+.service-points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0; }
+.service-point { padding: 16px; border-radius: 12px; background: #eff6ff; color: #1e3a8a; font-weight: 700; }
+.city-cta { margin-top: 28px; padding: 20px; border-radius: 12px; background: #071426; color: #fff; }.city-cta p { margin: 0 0 12px; color: #dbeafe; }.city-cta .button { margin: 0; }
+.city-products { margin-top: 30px; }.city-products h2 { margin-bottom: 6px; }.city-products > p { margin-top: 0; color: #64748b; }
+.city-product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.city-product { overflow: hidden; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; text-decoration: none; color: #0f172a; transition: transform .2s ease, box-shadow .2s ease; }.city-product:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(15, 23, 42, .1); }
+.city-product img { display: block; width: 100%; height: 112px; padding: 10px 14px; object-fit: contain; background: #eff6ff; }.city-product span { display: block; padding: 11px 13px; font-weight: 800; font-size: .9rem; }.city-product:hover span { color: #2563eb; }
+.city-hero-inner { position: relative; }.city-hero-content { padding-right: 270px; }.city-hero-content .button { margin-bottom: 0; }.city-hero-logo { position: absolute; top: -56px; right: 0; width: 240px; height: 240px; object-fit: contain; filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .24)); }
+@media (max-width: 760px) { .cities-list, .service-points, .city-product-grid { grid-template-columns: 1fr; } .city-hero-content { padding-right: 150px; }.city-hero-logo { top: -34px; width: 136px; height: 136px; }.city-product { display: flex; align-items: center; }.city-product img { width: 130px; height: 88px; flex: 0 0 130px; } }

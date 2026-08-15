@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LG PLACAS - Agendamento</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- O Flask irá injetar o caminho correto para o arquivo CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Link para o novo arquivo de estilo específico da página -->
+    <link rel="stylesheet" href="assets/css/agendamento.css">
   </head>
   <body class="min-h-screen text-slate-100">
     <main
@@ -15,7 +15,7 @@
       <section class="appointment-shell glass soft-shadow w-full rounded-3xl p-5 sm:p-8">
         <div
           id="headerContent"
-          class="mb-6"
+          class="mb-6 no-print"
         >
           <div class="mb-6 flex items-center justify-between gap-3">
             <a href="index.html" class="back-button">
@@ -150,14 +150,14 @@
                 class="mb-2 block text-sm font-semibold text-slate-200"
                 >Horário disponível</label
               >
-              <select
-                id="hora"
-                disabled
-                class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50 disabled:cursor-not-allowed disabled:bg-slate-800"
-                title="Horário disponível"
-              >
-                <option value="">Selecione uma data</option>
-              </select>
+              <input type="hidden" id="hora" name="hora" /> <!-- Mantém o input oculto -->
+              <input
+                type="text"
+                id="hora-display"
+                readonly
+                class="w-full cursor-pointer rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition hover:border-sky-400/50"
+                placeholder="Clique para ver horários"
+              />
             </div>
           </div>
 
@@ -280,7 +280,7 @@
                 Endereço da Empresa
               </p>
               <p class="text-sm text-slate-200 text-center">
-                Praça Doutor josé brás, n° 57, Morro chic, Itajubá - MG
+                Praça Doutor José Braz, n° 57, Morro Chic, Itajubá - MG
               </p>
               <p class="text-xs text-slate-400">
                 (Em frente à rodoviária e do lado do novo hotel)
@@ -318,7 +318,278 @@
       </section>
     </main>
 
+    <!-- Modal de Horários -->
+    <div id="horariosModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 px-4 backdrop-blur-sm">
+      <div class="glass soft-shadow w-full max-w-md rounded-3xl p-5 sm:p-6">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="text-2xl font-bold text-sky-100">Selecione um horário</h3>
+            <p id="modalDateLabel" class="mt-2 text-sm text-slate-300">
+              Horários disponíveis para a data escolhida.
+            </p>
+          </div>
+          <button
+            id="btnCloseModal"
+            type="button"
+            class="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+          >
+            Fechar
+          </button>
+        </div>
+        <div id="horarios-container" class="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-4">
+          <!-- Horários serão inseridos aqui -->
+        </div>
+        <div id="horarios-feedback" class="mt-4 hidden rounded-xl bg-amber-500/10 p-4 text-center text-sm text-amber-200">
+          Carregando horários...
+        </div>
+        <p class="mt-4 text-center text-xs text-slate-400">
+          Os horários em cinza já estão ocupados.
+        </p>
+      </div>
+    </div>
+
     <!-- O Flask irá injetar o caminho correto para o arquivo JS -->
     <script src="{{ url_for('static', filename='js/agendamento.js') }}"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>
+      // A mesma configuração do Firebase usada em outras páginas
+      const firebaseConfig = {
+        apiKey: "AIzaSyAT47ETWKHfHGya_rk76YrRqBPO7aI3N0Y",
+        authDomain: "instagramapp-34791.firebaseapp.com",
+        databaseURL: "https://instagramapp-34791-default-rtdb.firebaseio.com",
+        projectId: "instagramapp-34791",
+        storageBucket: "instagramapp-34791.appspot.com",
+        messagingSenderId: "749418759280",
+        appId: "1:749418759280:web:758c036737c686152f20b5",
+        measurementId: "G-5FDLV6V8RR",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const agendamentoForm = document.getElementById('agendamentoForm');
+        const successView = document.getElementById('successView');
+        const headerContent = document.getElementById('headerContent');
+        const consultarContainer = document.getElementById('consultarContainer');
+        const dataInput = document.getElementById('data');
+        const horaInput = document.getElementById('hora');
+        const horaDisplay = document.getElementById('hora-display');
+        const horariosModal = document.getElementById('horariosModal');
+        const btnCloseModal = document.getElementById('btnCloseModal');
+        const horariosContainer = document.getElementById('horarios-container');
+
+        agendamentoForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+
+          const nome = document.getElementById('nome').value;
+          const telefone = document.getElementById('telefone').value;
+          const placa = document.getElementById('placa').value;
+          const data = document.getElementById('data').value;
+          const hora = document.getElementById('hora').value;
+          const feedback = document.getElementById('feedback');
+          const btnAgendar = document.getElementById('btnAgendar');
+
+          if (!hora) {
+            feedback.textContent = 'Por favor, selecione um horário.';
+            feedback.className = 'rounded-2xl px-4 py-3 text-center text-sm font-semibold bg-amber-500/10 text-amber-300';
+            feedback.classList.remove('hidden');
+            return;
+          }
+
+          btnAgendar.disabled = true;
+          btnAgendar.textContent = 'Enviando...';
+
+          try {
+            // Verifica se já existe um agendamento para esta placa
+            const querySnapshot = await db.collection('agendamento instalação placas').where('placa', '==', placa.toUpperCase()).limit(1).get();
+
+            const dadosAgendamento = {
+              clienteNome: nome,
+              clienteTelefone: telefone,
+              placa: placa.toUpperCase(),
+              data: data,
+              hora: hora,
+              status: 'agendado',
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            if (!querySnapshot.empty) {
+              // Se existe, ATUALIZA o agendamento existente
+              const docId = querySnapshot.docs[0].id;
+              await db.collection('agendamento instalação placas').doc(docId).update(dadosAgendamento);
+            } else {
+              // Se não existe, CRIA um novo agendamento
+              dadosAgendamento.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+              await db.collection('agendamento instalação placas').add(dadosAgendamento);
+            }
+
+            // Preenche o resumo
+            document.getElementById('resumoNome').textContent = nome;
+            document.getElementById('resumoPlaca').textContent = placa.toUpperCase();
+            const dataObj = new Date(`${data}T${hora}:00`);
+            const dataFormatada = new Intl.DateTimeFormat('pt-BR', {
+              dateStyle: 'full',
+              timeStyle: 'short'
+            }).format(dataObj);
+            document.getElementById('resumoDataHora').textContent = dataFormatada;
+
+            // Esconde o formulário e cabeçalho, mostra a tela de sucesso
+            agendamentoForm.classList.add('hidden');
+            headerContent.classList.add('hidden');
+            consultarContainer.classList.add('hidden');
+            successView.classList.remove('hidden');
+
+            // Rola para o topo da tela de sucesso
+            successView.scrollIntoView({ behavior: 'smooth' });
+
+          } catch (error) {
+            console.error("Erro ao agendar:", error);
+            feedback.textContent = 'Erro ao agendar. Tente novamente.';
+            feedback.className = 'rounded-2xl px-4 py-3 text-center text-sm font-semibold bg-rose-500/10 text-rose-300';
+            feedback.classList.remove('hidden');
+            btnAgendar.disabled = false;
+            btnAgendar.textContent = 'Finalizar agendamento';
+          }
+        });
+
+        // --- Lógica do Modal de Horários ---
+
+        function openModal() {
+          if (!dataInput.value) {
+            alert("Por favor, selecione uma data primeiro.");
+            return;
+          }
+          horariosModal.classList.remove('hidden');
+          horariosModal.classList.add('flex');
+          fetchHorarios(dataInput.value);
+        }
+
+        function closeModal() {
+          horariosModal.classList.add('hidden');
+          horariosModal.classList.remove('flex');
+        }
+
+        horaDisplay.addEventListener('click', openModal);
+        btnCloseModal.addEventListener('click', closeModal);
+        horariosModal.addEventListener('click', (e) => {
+          if (e.target === horariosModal) {
+            closeModal();
+          }
+        });
+
+        horariosContainer.addEventListener('click', function(e) {
+          if (e.target.classList.contains('horario-btn') && !e.target.disabled) {
+            const selectedTime = e.target.dataset.time;
+            horaInput.value = selectedTime;
+            horaDisplay.value = selectedTime;
+            closeModal();
+          }
+        });
+
+        dataInput.addEventListener('change', () => {
+          // Limpa o horário selecionado ao mudar a data
+          horaInput.value = '';
+          horaDisplay.value = '';
+          horaDisplay.placeholder = 'Clique para ver horários';
+        });
+
+        async function fetchHorarios(data) {
+            const feedbackDiv = document.getElementById('horarios-feedback');
+            horariosContainer.innerHTML = '';
+            feedbackDiv.textContent = 'Carregando horários...';
+            feedbackDiv.classList.remove('hidden');
+
+            try {
+                const agendamentosSnap = await db.collection('agendamento instalação placas').where('data', '==', data).get();
+                const horariosOcupados = new Set(agendamentosSnap.docs.map(doc => doc.data().hora));
+
+                const horariosDisponiveis = [
+                    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+                    "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
+                ];
+
+                if (horariosDisponiveis.every(h => horariosOcupados.has(h))) {
+                    feedbackDiv.textContent = 'Não há horários disponíveis para esta data. Por favor, escolha outro dia.';
+                } else {
+                    feedbackDiv.classList.add('hidden');
+                }
+
+                horariosDisponiveis.forEach(horario => {
+                    const isOcupado = horariosOcupados.has(horario);
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'horario-btn';
+                    button.dataset.time = horario;
+                    button.textContent = horario;
+                    if (isOcupado) {
+                        button.disabled = true;
+                    }
+                    horariosContainer.appendChild(button);
+                });
+
+            } catch (error) {
+                console.error("Erro ao buscar horários: ", error);
+                feedbackDiv.textContent = 'Erro ao carregar horários. Tente novamente.';
+            }
+        }
+
+        // Lógica para o botão de download (simples, pode ser melhorado com uma lib de PDF)
+        const btnDownload = document.getElementById('btnDownload');
+        if (btnDownload) {
+          btnDownload.addEventListener('click', () => {
+            window.print();
+          });
+        }
+      });
+    </script>
+    <script>
+      // Este script pode ser removido ou mesclado com o de cima.
+      // A lógica dele foi incorporada no script principal.
+      /*
+      document.addEventListener('DOMContentLoaded', function () {
+        const container = document.getElementById('horarios-container');
+        const horaInput = document.getElementById('hora');
+
+        container.addEventListener('click', function(e) {
+          if (e.target.classList.contains('horario-btn')) {
+            // Remove 'selected' from all buttons
+            const buttons = container.querySelectorAll('.horario-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+
+            // Add 'selected' to the clicked button
+            e.target.classList.add('selected');
+
+            // Update the hidden input value
+            horaInput.value = e.target.dataset.time;
+          }
+        });
+      });
+      */
+    </script>
+  </body>
+</html>
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const container = document.getElementById('horarios-container');
+        const horaInput = document.getElementById('hora');
+
+        container.addEventListener('click', function(e) {
+          if (e.target.classList.contains('horario-btn')) {
+            // Remove 'selected' from all buttons
+            const buttons = container.querySelectorAll('.horario-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+
+            // Add 'selected' to the clicked button
+            e.target.classList.add('selected');
+
+            // Update the hidden input value
+            horaInput.value = e.target.dataset.time;
+          }
+        });
+      });
+    </script>
   </body>
 </html>
