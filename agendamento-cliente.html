@@ -261,6 +261,7 @@
           </h2>
 
           <div
+            id="resumoUnico"
             class="rounded-2xl border border-white/10 bg-slate-950/40 p-5 text-left space-y-3"
           >
             <p
@@ -283,6 +284,7 @@
               ></span>
             </div>
           </div>
+          <div id="resumoAgendamentos" class="hidden space-y-3 text-left"></div>
 
           <div class="space-y-4 pt-4 border-t border-white/10">
             <div class="flex flex-col items-center gap-1">
@@ -399,9 +401,30 @@
         const btnVoltarAgendar = document.getElementById('btnVoltarAgendar');
         const btnBuscarAgendamento = document.getElementById('btnBuscarAgendamento');
         const consultarFeedback = document.getElementById('consultarFeedback');
+        const resumoUnico = document.getElementById('resumoUnico');
+        const resumoAgendamentos = document.getElementById('resumoAgendamentos');
         const hoje = new Date();
         const hojeIso = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`;
         dataInput.min = hojeIso;
+        const agendamentoFuturo = agendamento => {
+          const dataHora = new Date(`${agendamento.data}T${agendamento.hora}:00`);
+          return !Number.isNaN(dataHora.getTime()) && dataHora > new Date();
+        };
+        const formatarTelefone = valor => {
+          const numeros = String(valor || '').replace(/\D/g, '').slice(0, 11);
+          if (numeros.length <= 2) return numeros ? `(${numeros}` : '';
+          if (numeros.length <= 6) return `(${numeros.slice(0, 2)}) ${numeros.slice(2)}`;
+          if (numeros.length <= 10) return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 6)}-${numeros.slice(6)}`;
+          return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 3)} ${numeros.slice(3, 7)}-${numeros.slice(7)}`;
+        };
+        const telefoneInput = document.getElementById('telefone');
+        const consTelefoneInput = document.getElementById('consTelefone');
+        telefoneInput.addEventListener('input', () => {
+          telefoneInput.value = formatarTelefone(telefoneInput.value);
+        });
+        consTelefoneInput.addEventListener('input', () => {
+          consTelefoneInput.value = formatarTelefone(consTelefoneInput.value);
+        });
 
         veiculoZeroInput.addEventListener('change', () => {
           placaInput.required = !veiculoZeroInput.checked;
@@ -547,6 +570,7 @@
         btnBuscarAgendamento.addEventListener('click', async () => {
           const placaConsulta = document.getElementById('consPlaca').value.trim().toUpperCase();
           const telefoneConsulta = document.getElementById('consTelefone').value.trim();
+          const telefoneNormalizado = valor => (valor || '').replace(/\D/g, '');
 
           if (!placaConsulta && !telefoneConsulta) {
             consultarFeedback.textContent = 'Informe a placa ou o telefone usado no agendamento.';
@@ -559,24 +583,56 @@
           btnBuscarAgendamento.textContent = 'Buscando...';
           try {
             const consulta = await db.collection('agendamento instalação placas').get();
-            const agendamento = consulta.docs
+            const agendamentos = consulta.docs
               .map(doc => ({ id: doc.id, ...doc.data() }))
-              .find(item => (!placaConsulta || item.placa === placaConsulta) &&
-                (!telefoneConsulta || item.clienteTelefone === telefoneConsulta));
+              .filter(item => (!placaConsulta || item.placa === placaConsulta) &&
+                (!telefoneConsulta || telefoneNormalizado(item.clienteTelefone) === telefoneNormalizado(telefoneConsulta)) &&
+                agendamentoFuturo(item));
 
-            if (!agendamento) {
+            if (!agendamentos.length) {
               consultarFeedback.textContent = 'Nenhum agendamento encontrado com esses dados.';
               consultarFeedback.className = 'rounded-2xl px-4 py-3 text-center text-sm font-semibold bg-amber-500/10 text-amber-300';
               consultarFeedback.classList.remove('hidden');
               return;
             }
 
-            document.getElementById('resumoNome').textContent = agendamento.clienteNome || '';
-            document.getElementById('resumoPlaca').textContent = agendamento.placa || 'VEICULO ZERO';
-            document.getElementById('resumoDataHora').textContent = new Intl.DateTimeFormat('pt-BR', {
+            const formatarDataHora = agendamento => new Intl.DateTimeFormat('pt-BR', {
               dateStyle: 'full',
               timeStyle: 'short'
             }).format(new Date(`${agendamento.data}T${agendamento.hora}:00`));
+
+            if (agendamentos.length === 1) {
+              const [agendamento] = agendamentos;
+              resumoUnico.classList.remove('hidden');
+              resumoAgendamentos.classList.add('hidden');
+              document.getElementById('resumoNome').textContent = agendamento.clienteNome || '';
+              document.getElementById('resumoPlaca').textContent = agendamento.placa || 'VEICULO ZERO';
+              document.getElementById('resumoDataHora').textContent = formatarDataHora(agendamento);
+            } else {
+              resumoUnico.classList.add('hidden');
+              resumoAgendamentos.classList.remove('hidden');
+              resumoAgendamentos.innerHTML = '';
+
+              const titulo = document.createElement('p');
+              titulo.className = 'text-xs uppercase tracking-wider text-slate-400 font-bold';
+              titulo.textContent = `${agendamentos.length} agendamentos encontrados`;
+              resumoAgendamentos.appendChild(titulo);
+
+              agendamentos.forEach(agendamento => {
+                const cartao = document.createElement('div');
+                cartao.className = 'rounded-2xl border border-white/10 bg-slate-950/40 p-5 space-y-2';
+                cartao.innerHTML = `
+                  <p class="text-sm"><span class="text-slate-400">Cliente:</span> <strong class="text-slate-100"></strong></p>
+                  <p class="text-sm"><span class="text-slate-400">Placa:</span> <strong class="font-mono uppercase text-slate-100"></strong></p>
+                  <p class="text-sm"><span class="text-slate-400">Data e hora:</span> <strong class="text-slate-100"></strong></p>
+                `;
+                const valores = cartao.querySelectorAll('strong');
+                valores[0].textContent = agendamento.clienteNome || '';
+                valores[1].textContent = agendamento.placa || 'VEICULO ZERO';
+                valores[2].textContent = formatarDataHora(agendamento);
+                resumoAgendamentos.appendChild(cartao);
+              });
+            }
             consultarForm.classList.add('hidden');
             headerContent.classList.add('hidden');
             successView.classList.remove('hidden');
