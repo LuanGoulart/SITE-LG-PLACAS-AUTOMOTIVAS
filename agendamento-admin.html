@@ -710,6 +710,10 @@
           .replaceAll("'", "&#39;");
       }
 
+      function setElementHtml(element, html) {
+        if (element) element.innerHTML = html;
+      }
+
       function isPastAppointment(item) {
         const appointmentDate = new Date(`${item.data}T${item.hora}:00`);
         return !Number.isNaN(appointmentDate.getTime()) && appointmentDate < new Date();
@@ -762,7 +766,7 @@
           ).length,
         );
 
-        appointmentsBody.innerHTML = state.appointments
+        setElementHtml(appointmentsBody, state.appointments
           .slice(0, 150).map(
             (item) => {
               const passado = isPastAppointment(item);
@@ -784,7 +788,7 @@
           `;
             },
           )
-          .join("");
+          .join(""));
 
         emptyAppointments.classList.toggle(
           "hidden",
@@ -808,7 +812,7 @@
           state.notifications.filter((item) => !item.lida).length,
         );
 
-        notificationsList.innerHTML = state.notifications
+        setElementHtml(notificationsList, state.notifications
           .map(
             (item) => `
             <article class="rounded-2xl border ${item.lida ? "border-white/10 bg-slate-950/25" : "border-emerald-400/20 bg-emerald-400/8"} p-4">
@@ -822,7 +826,7 @@
             </article>
           `,
           )
-          .join("");
+          .join(""));
 
         emptyNotifications.classList.toggle(
           "hidden",
@@ -883,8 +887,8 @@
             .join("");
         }
 
-        whatsappPartnerChart.innerHTML = renderCountBars(partnerCounts);
-        whatsappPageChart.innerHTML = renderCountBars(pageCounts);
+        setElementHtml(whatsappPartnerChart, renderCountBars(partnerCounts));
+        setElementHtml(whatsappPageChart, renderCountBars(pageCounts));
 
         const periodDays = Array.from({ length: 7 }, (_, index) => {
           const date = new Date();
@@ -905,7 +909,7 @@
         }));
 
         const periodMax = Math.max(...periodCounts.map((item) => item.count), 1);
-        whatsappPeriodChart.innerHTML = periodCounts
+        setElementHtml(whatsappPeriodChart, periodCounts
           .map(
             (item) => `
             <div>
@@ -921,7 +925,7 @@
             </div>
           `,
           )
-          .join("");
+          .join(""));
 
         const recent = clicks.slice(0, 5).map((item) => {
           let createdAt = item.createdAt;
@@ -940,7 +944,7 @@
           `;
         }).join("");
 
-        whatsappClicksChart.innerHTML = recent || '<p class="text-sm text-slate-400">Nenhum clique registrado ainda.</p>';
+        setElementHtml(whatsappClicksChart, recent || '<p class="text-sm text-slate-400">Nenhum clique registrado ainda.</p>');
       }
 
       function renderPartnerViews() {
@@ -978,7 +982,7 @@
         }));
 
         const periodMax = Math.max(...periodCounts.map((item) => item.count), 1);
-        partnerViewsPeriodChart.innerHTML = periodCounts
+        setElementHtml(partnerViewsPeriodChart, periodCounts
           .map(
             (item) => `
             <div>
@@ -994,9 +998,9 @@
             </div>
           `,
           )
-          .join("");
+          .join(""));
 
-        partnerViewsRecent.innerHTML = views
+        setElementHtml(partnerViewsRecent, views
           .slice(0, 5)
           .map((item) => {
             let viewedAt = item.viewedAt;
@@ -1012,7 +1016,7 @@
               </div>
             `;
           })
-          .join("");
+          .join(""));
       }
 
       function renderSelectedDay() {
@@ -1023,7 +1027,7 @@
         selectedDayLabel.textContent = `Dia selecionado: ${formatDate(state.calendar.selectedDate)}`;
         agendamentosDia.textContent = String(items.length);
 
-        selectedDayList.innerHTML = items
+        setElementHtml(selectedDayList, items
           .map(
             (item) => {
               const passado = isPastAppointment(item);
@@ -1049,7 +1053,7 @@
           `;
             },
           )
-          .join("");
+          .join(""));
 
         emptySelectedDay.classList.toggle("hidden", items.length > 0);
 
@@ -1257,7 +1261,7 @@
           `);
         }
 
-        calendarGrid.innerHTML = cells.join("");
+        setElementHtml(calendarGrid, cells.join(""));
         calendarGrid.querySelectorAll("button[data-date]").forEach((button) => {
           button.addEventListener("click", () => {
             state.calendar.selectedDate = button.getAttribute("data-date");
@@ -1480,7 +1484,7 @@
       }
 
       function renderPins() {
-        pinList.innerHTML = state.pins
+        setElementHtml(pinList, state.pins
           .map(
             (pin) => `
           <div class="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/20 p-3">
@@ -1495,7 +1499,7 @@
           </div>
         `,
           )
-          .join("");
+          .join(""));
       }
 
       window.editPinUI = function (id) {
