@@ -127,6 +127,14 @@
               placeholder="ABC1D23"
               title="Placa do veículo"
             />
+            <label class="mt-3 flex items-center gap-2 text-sm text-slate-300">
+              <input
+                type="checkbox"
+                id="veiculoZero"
+                class="h-4 w-4 rounded border-white/20 bg-slate-950/40 text-sky-500"
+              />
+              Veículo zero, ainda sem placa
+            </label>
           </div>
 
           <div class="grid gap-4 border-t border-white/10 pt-4 md:grid-cols-2">
@@ -216,6 +224,10 @@
           >
             Buscar Agendamento
           </button>
+          <div
+            id="consultarFeedback"
+            class="hidden rounded-2xl px-4 py-3 text-center text-sm font-semibold"
+          ></div>
           <button
             id="btnVoltarAgendar"
             class="text-xs text-slate-500 hover:text-slate-300 transition uppercase tracking-widest"
@@ -376,23 +388,48 @@
         const dataInput = document.getElementById('data');
         const horaInput = document.getElementById('hora');
         const horaDisplay = document.getElementById('hora-display');
+        const placaInput = document.getElementById('placa');
+        const veiculoZeroInput = document.getElementById('veiculoZero');
         const horariosModal = document.getElementById('horariosModal');
         const btnCloseModal = document.getElementById('btnCloseModal');
         const horariosContainer = document.getElementById('horarios-container');
+        const feedback = document.getElementById('feedback');
+        const consultarForm = document.getElementById('consultarForm');
+        const btnTrocarParaConsulta = document.getElementById('btnTrocarParaConsulta');
+        const btnVoltarAgendar = document.getElementById('btnVoltarAgendar');
+        const btnBuscarAgendamento = document.getElementById('btnBuscarAgendamento');
+        const consultarFeedback = document.getElementById('consultarFeedback');
+        const hoje = new Date();
+        const hojeIso = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`;
+        dataInput.min = hojeIso;
+
+        veiculoZeroInput.addEventListener('change', () => {
+          placaInput.required = !veiculoZeroInput.checked;
+          placaInput.disabled = veiculoZeroInput.checked;
+          placaInput.value = veiculoZeroInput.checked ? '' : placaInput.value;
+          placaInput.placeholder = veiculoZeroInput.checked ? 'Veículo zero' : 'ABC1D23';
+        });
 
         agendamentoForm.addEventListener('submit', async function (e) {
           e.preventDefault();
 
           const nome = document.getElementById('nome').value;
           const telefone = document.getElementById('telefone').value;
-          const placa = document.getElementById('placa').value;
+          const placa = veiculoZeroInput.checked ? 'VEICULO ZERO' : placaInput.value.trim().toUpperCase();
           const data = document.getElementById('data').value;
           const hora = document.getElementById('hora').value;
-          const feedback = document.getElementById('feedback');
           const btnAgendar = document.getElementById('btnAgendar');
 
-          if (!hora) {
-            feedback.textContent = 'Por favor, selecione um horário.';
+          if (!data || data < hojeIso) {
+            feedback.textContent = 'Escolha uma data válida. Não é possível agendar no passado.';
+            feedback.className = 'rounded-2xl px-4 py-3 text-center text-sm font-semibold bg-amber-500/10 text-amber-300';
+            feedback.classList.remove('hidden');
+            return;
+          }
+
+          const dataHora = new Date(`${data}T${hora}:00`);
+          if (!hora || dataHora <= new Date()) {
+            feedback.textContent = 'Por favor, selecione um horário futuro.';
             feedback.className = 'rounded-2xl px-4 py-3 text-center text-sm font-semibold bg-amber-500/10 text-amber-300';
             feedback.classList.remove('hidden');
             return;
@@ -403,12 +440,12 @@
 
           try {
             // Verifica se já existe um agendamento para esta placa
-            const querySnapshot = await db.collection('agendamento instalação placas').where('placa', '==', placa.toUpperCase()).limit(1).get();
+            const querySnapshot = await db.collection('agendamento instalação placas').where('placa', '==', placa).limit(1).get();
 
             const dadosAgendamento = {
               clienteNome: nome,
               clienteTelefone: telefone,
-              placa: placa.toUpperCase(),
+              placa,
               data: data,
               hora: hora,
               status: 'agendado',
@@ -427,8 +464,8 @@
 
             // Preenche o resumo
             document.getElementById('resumoNome').textContent = nome;
-            document.getElementById('resumoPlaca').textContent = placa.toUpperCase();
-            const dataObj = new Date(`${data}T${hora}:00`);
+            document.getElementById('resumoPlaca').textContent = placa;
+            const dataObj = dataHora;
             const dataFormatada = new Intl.DateTimeFormat('pt-BR', {
               dateStyle: 'full',
               timeStyle: 'short'
@@ -495,6 +532,65 @@
           horaDisplay.placeholder = 'Clique para ver horários';
         });
 
+        btnTrocarParaConsulta.addEventListener('click', () => {
+          agendamentoForm.classList.add('hidden');
+          consultarContainer.classList.add('hidden');
+          consultarForm.classList.remove('hidden');
+        });
+
+        btnVoltarAgendar.addEventListener('click', () => {
+          consultarForm.classList.add('hidden');
+          agendamentoForm.classList.remove('hidden');
+          consultarContainer.classList.remove('hidden');
+        });
+
+        btnBuscarAgendamento.addEventListener('click', async () => {
+          const placaConsulta = document.getElementById('consPlaca').value.trim().toUpperCase();
+          const telefoneConsulta = document.getElementById('consTelefone').value.trim();
+
+          if (!placaConsulta && !telefoneConsulta) {
+            consultarFeedback.textContent = 'Informe a placa ou o telefone usado no agendamento.';
+            consultarFeedback.className = 'rounded-2xl px-4 py-3 text-center text-sm font-semibold bg-amber-500/10 text-amber-300';
+            consultarFeedback.classList.remove('hidden');
+            return;
+          }
+
+          btnBuscarAgendamento.disabled = true;
+          btnBuscarAgendamento.textContent = 'Buscando...';
+          try {
+            const consulta = await db.collection('agendamento instalação placas').get();
+            const agendamento = consulta.docs
+              .map(doc => ({ id: doc.id, ...doc.data() }))
+              .find(item => (!placaConsulta || item.placa === placaConsulta) &&
+                (!telefoneConsulta || item.clienteTelefone === telefoneConsulta));
+
+            if (!agendamento) {
+              consultarFeedback.textContent = 'Nenhum agendamento encontrado com esses dados.';
+              consultarFeedback.className = 'rounded-2xl px-4 py-3 text-center text-sm font-semibold bg-amber-500/10 text-amber-300';
+              consultarFeedback.classList.remove('hidden');
+              return;
+            }
+
+            document.getElementById('resumoNome').textContent = agendamento.clienteNome || '';
+            document.getElementById('resumoPlaca').textContent = agendamento.placa || 'VEICULO ZERO';
+            document.getElementById('resumoDataHora').textContent = new Intl.DateTimeFormat('pt-BR', {
+              dateStyle: 'full',
+              timeStyle: 'short'
+            }).format(new Date(`${agendamento.data}T${agendamento.hora}:00`));
+            consultarForm.classList.add('hidden');
+            headerContent.classList.add('hidden');
+            successView.classList.remove('hidden');
+          } catch (error) {
+            console.error('Erro ao consultar agendamento:', error);
+            consultarFeedback.textContent = 'Erro ao consultar. Tente novamente.';
+            consultarFeedback.className = 'rounded-2xl px-4 py-3 text-center text-sm font-semibold bg-rose-500/10 text-rose-300';
+            consultarFeedback.classList.remove('hidden');
+          } finally {
+            btnBuscarAgendamento.disabled = false;
+            btnBuscarAgendamento.textContent = 'Buscar Agendamento';
+          }
+        });
+
         async function fetchHorarios(data) {
             const feedbackDiv = document.getElementById('horarios-feedback');
             horariosContainer.innerHTML = '';
@@ -510,6 +606,11 @@
                     "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
                 ];
 
+                const agora = new Date();
+                const horariosPassados = new Set(horariosDisponiveis.filter(horario =>
+                  new Date(`${data}T${horario}:00`) <= agora
+                ));
+
                 if (horariosDisponiveis.every(h => horariosOcupados.has(h))) {
                     feedbackDiv.textContent = 'Não há horários disponíveis para esta data. Por favor, escolha outro dia.';
                 } else {
@@ -517,7 +618,7 @@
                 }
 
                 horariosDisponiveis.forEach(horario => {
-                    const isOcupado = horariosOcupados.has(horario);
+                    const isOcupado = horariosOcupados.has(horario) || horariosPassados.has(horario);
                     const button = document.createElement('button');
                     button.type = 'button';
                     button.className = 'horario-btn';
