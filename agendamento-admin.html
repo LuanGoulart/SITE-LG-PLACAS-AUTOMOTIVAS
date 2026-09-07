@@ -773,11 +773,21 @@
         setTimeout(() => toast.remove(), 3900);
       }
 
-      function playAppointmentSound() {
+      function prepareNotificationAudio() {
         try {
           notificationAudioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+          return notificationAudioContext.resume();
+        } catch (error) {
+          console.warn("Áudio de notificação indisponível:", error);
+          return Promise.resolve();
+        }
+      }
+
+      async function playAppointmentSound() {
+        try {
+          await prepareNotificationAudio();
           const audioContext = notificationAudioContext;
-          audioContext.resume();
+          if (!audioContext || audioContext.state !== "running") return;
           [0, 0.22, 0.44].forEach((delay, index) => {
             const oscillator = audioContext.createOscillator();
             const gain = audioContext.createGain();
@@ -1521,6 +1531,7 @@
           return;
         }
 
+        prepareNotificationAudio();
         state.adminKey = key;
         localStorage.setItem(ADMIN_STORAGE_KEY, key);
         renderGate();
@@ -1676,6 +1687,7 @@
       btnCancelPinEdit.addEventListener("click", clearPinForm);
 
       btnUnlockAdmin.addEventListener("click", unlockAdmin);
+      document.addEventListener("pointerdown", prepareNotificationAudio, { once: true });
       adminKeyInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") unlockAdmin();
       });
