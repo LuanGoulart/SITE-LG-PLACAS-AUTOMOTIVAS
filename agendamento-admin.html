@@ -519,6 +519,20 @@
           </div>
           <div>
             <label
+              for="editDespachante"
+              class="mb-2 block text-sm font-semibold text-slate-200"
+              >Nome do despachante <span class="font-normal text-slate-400">(opcional)</span></label
+            >
+            <input
+              id="editDespachante"
+              type="text"
+              placeholder="Digite o nome, se houver"
+              title="Nome do despachante"
+              class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50"
+            />
+          </div>
+          <div>
+            <label
               for="editPlaca"
               class="mb-2 block text-sm font-semibold text-slate-200"
               >Placa</label
@@ -620,6 +634,7 @@
       const editId = document.getElementById("editId");
       const editNome = document.getElementById("editNome");
       const editTelefone = document.getElementById("editTelefone");
+      const editDespachante = document.getElementById("editDespachante");
       const editPlaca = document.getElementById("editPlaca");
       const editData = document.getElementById("editData");
       const editHora = document.getElementById("editHora");
@@ -837,6 +852,17 @@
         }
       }
 
+      function despachanteBadge(item) {
+        if (!item.despachante) return "";
+        const nome = typeof item.despachante === "string"
+          ? item.despachante.trim()
+          : "";
+        const texto = nome
+          ? `Despachante: ${escapeHtml(nome)}`
+          : "Com despachante";
+        return `<span class="mt-1 inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 text-xs font-semibold text-emerald-200">${texto}</span>`;
+      }
+
       function renderAppointments() {
         totalAgendamentos.textContent = String(state.appointments.length);
         agendamentosDia.textContent = String(
@@ -853,7 +879,10 @@
             <tr class="${passado ? "bg-violet-500/10" : ""} hover:bg-white/5">
               <td class="px-4 py-3 text-slate-200 ${passado ? "line-through decoration-violet-400/80" : ""}">${escapeHtml(formatDate(item.data))}</td>
               <td class="px-4 py-3 font-semibold ${passado ? "text-violet-200 line-through decoration-violet-400/80" : "text-white"}">${escapeHtml(item.hora)}</td>
-              <td class="px-4 py-3 text-slate-200 ${passado ? "line-through decoration-violet-400/80" : ""}">${escapeHtml(item.clienteNome)}</td>
+              <td class="px-4 py-3 text-slate-200 ${passado ? "line-through decoration-violet-400/80" : ""}">
+                <div>${escapeHtml(item.clienteNome)}</div>
+                ${despachanteBadge(item)}
+              </td>
               <td class="px-4 py-3 text-slate-300 ${passado ? "line-through decoration-violet-400/80" : ""}">${escapeHtml(formatarTelefone(item.clienteTelefone))}</td>
               <td class="px-4 py-3 font-mono text-slate-100 ${passado ? "line-through decoration-violet-400/80" : ""}">${escapeHtml(item.placa)}</td>
               <td class="px-4 py-3"><span class="rounded-full ${passado ? "bg-violet-400/20 text-violet-200" : "bg-sky-400/15 text-sky-200"} px-3 py-1 text-xs font-semibold">${passado ? "passado" : escapeHtml(item.status || "agendado")}</span></td>
@@ -1116,6 +1145,7 @@
                 <div>
                   <p class="text-base font-bold ${passado ? "text-violet-100 line-through decoration-violet-400/80" : "text-white"}">${escapeHtml(item.clienteNome)}</p>
                   <p class="mt-1 text-sm ${passado ? "text-violet-200 line-through decoration-violet-400/80" : "text-slate-300"}">${escapeHtml(item.placa)} - ${escapeHtml(formatarTelefone(item.clienteTelefone))}</p>
+                  ${despachanteBadge(item)}
                 </div>
                 <div class="flex flex-col items-end gap-2">
                   <div class="flex items-center gap-2">
@@ -1158,6 +1188,11 @@
         editId.value = item.id;
         editNome.value = item.clienteNome;
         editTelefone.value = formatarTelefone(item.clienteTelefone);
+        editDespachante.value = typeof item.despachante === "string"
+          ? item.despachante
+          : item.despachante === true
+            ? "Com despachante"
+            : "";
         editPlaca.value = item.placa;
         editData.value = item.data;
         await fillEditHours(item.data, item.hora);
@@ -1215,6 +1250,7 @@
             .update({
               clienteNome: editNome.value,
               clienteTelefone: editTelefone.value,
+              despachante: editDespachante.value.trim(),
               placa: editPlaca.value.toUpperCase(),
               data: editData.value,
               hora: editHora.value,

@@ -114,6 +114,21 @@
 
           <div>
             <label
+              for="despachante"
+              class="mb-2 block text-sm font-semibold text-slate-200"
+              >Nome do despachante <span class="font-normal text-slate-400">(opcional)</span></label
+            >
+            <input
+              type="text"
+              id="despachante"
+              class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400/50 focus:bg-slate-950/60"
+              placeholder="Digite o nome do despachante, se houver"
+              title="Nome do despachante"
+            />
+          </div>
+
+          <div>
+            <label
               for="placa"
               class="mb-2 block text-sm font-semibold text-slate-200"
               >Placa do veículo</label
@@ -438,6 +453,7 @@
 
           const nome = document.getElementById('nome').value;
           const telefone = document.getElementById('telefone').value;
+          const despachante = document.getElementById('despachante').value.trim();
           const placa = veiculoZeroInput.checked ? 'VEICULO ZERO' : placaInput.value.trim().toUpperCase();
           const data = document.getElementById('data').value;
           const hora = document.getElementById('hora').value;
@@ -468,6 +484,7 @@
             const dadosAgendamento = {
               clienteNome: nome,
               clienteTelefone: telefone,
+              despachante,
               placa,
               data: data,
               hora: hora,
