@@ -717,3 +717,147 @@ body {
     background-color: #f8f9fa !important;
   }
 }
+
+@media (max-width: 640px) {
+  body > main[class] {
+    min-height: auto;
+    align-items: flex-start;
+    padding: 0.75rem 0.6rem;
+  }
+
+  body > main > .appointment-shell {
+    padding: 0.75rem;
+    border-radius: 1rem;
+  }
+
+  #headerContent {
+    margin-bottom: 0.75rem;
+  }
+
+  #headerContent > div:first-child {
+    margin-bottom: 0.75rem;
+  }
+
+  #headerContent > div:nth-child(2) {
+    gap: 0.75rem;
+  }
+
+  #headerContent > div:nth-child(2) > div:last-child {
+    display: none;
+  }
+
+  #headerContent h1 {
+    margin-top: 0.5rem;
+    font-size: 1.75rem;
+    line-height: 1.12;
+  }
+
+  #headerContent > div:nth-child(2) > div:first-child > p:not(:first-child) {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  #headerContent > div:nth-child(2) > div:first-child > div {
+    margin-top: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .products-carousel {
+    margin-bottom: 0.75rem;
+    padding: 0.625rem 0;
+  }
+
+  .products-carousel-heading {
+    margin-bottom: 0.5rem;
+  }
+
+  .products-carousel-heading h2 {
+    font-size: 1rem;
+  }
+
+  .products-all-link {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+  }
+
+  .products-carousel-controls {
+    gap: 0.5rem;
+  }
+
+  .products-carousel-controls button {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .products-carousel-track {
+    grid-auto-columns: minmax(250px, 1fr);
+    gap: 0.5rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .products-carousel-card {
+    min-height: 105px;
+    gap: 0.625rem;
+    padding: 0.625rem;
+    border-radius: 0.625rem;
+  }
+
+  .products-carousel-card img {
+    width: 4.25rem;
+    height: 4rem;
+    flex-basis: 4.25rem;
+  }
+
+  .products-carousel-card h3 {
+    font-size: 0.84rem;
+  }
+
+  .products-carousel-card a {
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+  }
+
+  #agendamentoForm {
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 1rem;
+  }
+
+  #agendamentoForm > .grid {
+    gap: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  #agendamentoForm label {
+    margin-bottom: 0.3rem;
+    font-size: 0.82rem;
+  }
+
+  #agendamentoForm label.mt-3 {
+    margin-top: 0.5rem;
+  }
+
+  #agendamentoForm input:not([type="checkbox"]) {
+    min-height: 44px;
+    border-radius: 0.75rem;
+    padding: 0.65rem 0.75rem;
+  }
+
+  #agendamentoForm > .rounded-2xl {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.78rem;
+  }
+
+  #btnAgendar {
+    min-height: 44px;
+    padding: 0.8rem 1rem;
+    letter-spacing: 0.12em;
+  }
+
+  #consultarContainer {
+    margin-top: 0.75rem;
+  }
+}
