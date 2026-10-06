@@ -726,9 +726,18 @@ body {
   }
 
   body > main > .appointment-shell {
+    display: flex;
+    flex-direction: column;
     padding: 0.75rem;
     border-radius: 1rem;
   }
+
+  #headerContent { order: 0; }
+  #agendamentoForm { order: 1; }
+  #consultarContainer { order: 2; }
+  #consultarForm { order: 3; }
+  .products-carousel { order: 4; }
+  #successView { order: 5; }
 
   #headerContent {
     margin-bottom: 0.75rem;
