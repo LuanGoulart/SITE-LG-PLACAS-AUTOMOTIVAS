@@ -75,6 +75,46 @@
           </div>
         </div>
 
+        <section class="products-carousel no-print" aria-label="Produtos e serviços" aria-roledescription="carrossel">
+          <div class="products-carousel-heading">
+            <div>
+              <p class="products-carousel-eyebrow">LG Placas</p>
+              <h2>Conheça nossos produtos</h2>
+              <a class="products-all-link" href="/produtos.html">Ver todos os produtos <span aria-hidden="true">&rarr;</span></a>
+            </div>
+            <div class="products-carousel-controls">
+              <button type="button" id="productsPrev" aria-label="Produtos anteriores">&larr;</button>
+              <button type="button" id="productsNext" aria-label="Próximos produtos">&rarr;</button>
+            </div>
+          </div>
+          <div class="products-carousel-track" id="productsTrack" tabindex="0">
+            <article class="products-carousel-card">
+              <img src="/imagens/suporte-carro.png" alt="Suporte de placa para carro" loading="lazy">
+              <div><h3>Suporte de placa para carro</h3><a href="https://wa.me/5535998669644?text=Ol%C3%A1%21%20Gostaria%20de%20consultar%20o%20suporte%20de%20placa%20para%20carro." target="_blank" rel="noopener">Consultar suporte <span aria-hidden="true">&rarr;</span></a></div>
+            </article>
+            <article class="products-carousel-card">
+              <img src="/imagens/suporte-moto.png" alt="Suporte de placa para moto" loading="lazy">
+              <div><h3>Suporte de placa para moto</h3><a href="https://wa.me/5535998669644?text=Ol%C3%A1%21%20Gostaria%20de%20consultar%20o%20suporte%20de%20placa%20para%20moto." target="_blank" rel="noopener">Consultar suporte <span aria-hidden="true">&rarr;</span></a></div>
+            </article>
+            <article class="products-carousel-card">
+              <img src="/imagens/img-todas-placas-carro.png" alt="Placa Mercosul para carro" loading="lazy">
+              <div><h3>Placa para carro</h3><a href="/placa-mercosul-carro-itajuba.html">Ver serviço <span aria-hidden="true">&rarr;</span></a></div>
+            </article>
+            <article class="products-carousel-card">
+              <img src="/imagens/img-placas-moto.png" alt="Placa Mercosul para moto" loading="lazy">
+              <div><h3>Placa para moto</h3><a href="/placa-mercosul-moto-itajuba.html">Ver serviço <span aria-hidden="true">&rarr;</span></a></div>
+            </article>
+            <article class="products-carousel-card">
+              <img src="/imagens/image1-7-0.png" alt="Primeiro emplacamento" loading="lazy">
+              <div><h3>Primeiro emplacamento</h3><a href="/primeiro-emplacamento-itajuba.html">Ver serviço <span aria-hidden="true">&rarr;</span></a></div>
+            </article>
+            <article class="products-carousel-card">
+              <img src="/imagens/img-placas-especiais.png" alt="Segunda via de placa" loading="lazy">
+              <div><h3>Segunda via</h3><a href="/segunda-via-placa-itajuba.html">Ver serviço <span aria-hidden="true">&rarr;</span></a></div>
+            </article>
+          </div>
+        </section>
+
         <form
           id="agendamentoForm"
           class="grid gap-4 rounded-3xl border border-sky-400/20 bg-slate-950/30 p-4 shadow-2xl shadow-sky-950/30 sm:p-5"
@@ -418,6 +458,53 @@
         const consultarFeedback = document.getElementById('consultarFeedback');
         const resumoUnico = document.getElementById('resumoUnico');
         const resumoAgendamentos = document.getElementById('resumoAgendamentos');
+        const productsTrack = document.getElementById('productsTrack');
+        const productsCarousel = productsTrack.closest('.products-carousel');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let productsTimer;
+        let productsResumeTimer;
+        const moveProductCard = direction => {
+          const firstCard = productsTrack.querySelector('.products-carousel-card');
+          const gap = parseFloat(getComputedStyle(productsTrack).gap) || 0;
+          const step = firstCard.getBoundingClientRect().width + gap;
+          const maxScroll = productsTrack.scrollWidth - productsTrack.clientWidth;
+          const atStart = productsTrack.scrollLeft <= 2;
+          const atEnd = productsTrack.scrollLeft >= maxScroll - 2;
+          const target = direction > 0 && atEnd
+            ? 0
+            : direction < 0 && atStart
+              ? maxScroll
+              : productsTrack.scrollLeft + direction * step;
+
+          productsTrack.scrollTo({
+            left: target,
+            behavior: prefersReducedMotion.matches ? 'instant' : 'smooth'
+          });
+        };
+        const stopProductsRotation = () => {
+          window.clearInterval(productsTimer);
+          window.clearTimeout(productsResumeTimer);
+        };
+        const startProductsRotation = () => {
+          stopProductsRotation();
+          if (prefersReducedMotion.matches || document.visibilityState !== 'visible' ||
+              productsCarousel.matches(':hover') || productsCarousel.contains(document.activeElement)) return;
+          productsTimer = window.setInterval(() => moveProductCard(1), 3500);
+        };
+
+        document.getElementById('productsPrev').addEventListener('click', () => moveProductCard(-1));
+        document.getElementById('productsNext').addEventListener('click', () => moveProductCard(1));
+        productsCarousel.addEventListener('pointerenter', stopProductsRotation);
+        productsCarousel.addEventListener('pointerleave', startProductsRotation);
+        productsCarousel.addEventListener('focusin', stopProductsRotation);
+        productsCarousel.addEventListener('focusout', () => window.setTimeout(startProductsRotation, 0));
+        productsCarousel.addEventListener('touchstart', stopProductsRotation, { passive: true });
+        productsCarousel.addEventListener('touchend', () => {
+          productsResumeTimer = window.setTimeout(startProductsRotation, 4500);
+        }, { passive: true });
+        document.addEventListener('visibilitychange', startProductsRotation);
+        prefersReducedMotion.addEventListener('change', startProductsRotation);
+        startProductsRotation();
         const hoje = new Date();
         const hojeIso = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`;
         dataInput.min = hojeIso;

@@ -145,13 +145,111 @@ h2 {
   }
 }
 
-/* Garante o degradê principal da hero em qualquer dispositivo */
+/* Base visual do hero principal */
 #home {
-  background: radial-gradient(circle at top, #2563eb 0%, #00040a 78%) !important;
+  background: #091626 !important;
 }
 
-@media (max-width: 768px) {
-  #home {
-    background: radial-gradient(circle at 50% 0%, #2563eb 0%, #00040a 82%) !important;
-  }
+html body [class~="max-w-[96rem]"] {
+  max-width: 80rem;
+  padding-right: clamp(1rem, 4vw, 2.5rem);
+  padding-left: clamp(1rem, 4vw, 2.5rem);
+}
+
+/* Ritmo e largura das seções abaixo do hero */
+body > section:not(#home) {
+  padding-block: clamp(3rem, 5vw, 4.5rem);
+}
+
+#produtos > div > .text-center,
+#quando-trocar > div > .text-center,
+#parceiros > div > .max-w-3xl,
+#servicos > div > h2 {
+  margin-bottom: 2.5rem;
+}
+
+#produtos > div > .grid {
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+#produtos .card-hover > img {
+  height: 12.5rem;
+}
+
+#produtos .card-hover > div {
+  padding: 1.5rem;
+}
+
+#suportes > div > .text-center {
+  margin-bottom: 2.5rem;
+}
+
+#suportes > div > .grid {
+  max-width: 72rem;
+  gap: 1.5rem;
+}
+
+#quando-trocar > div > .grid {
+  gap: 1.5rem;
+}
+
+#quando-trocar > div > .grid > div {
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+#faq > div > .grid {
+  gap: 0.75rem;
+}
+
+#faq .faq-item {
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+#sobre > div {
+  column-gap: 3rem;
+}
+
+#parceiros > div > .grid {
+  gap: 1.5rem;
+}
+
+#parceiros article {
+  max-width: none;
+  border-radius: 0.5rem;
+}
+
+#servicos > div > .grid {
+  gap: 1.5rem;
+}
+
+#servicos .service-card-modern {
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+#produtos,
+#faq {
+  background-color: #f8fafc;
+}
+
+#sobre,
+#servicos {
+  background-color: #ffffff;
+}
+
+#suportes,
+#parceiros {
+  background-color: #eaf0f7;
+}
+
+#contato {
+  background-color: #dbeafe;
+}
+
+#contato .contact-map {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.12);
 }

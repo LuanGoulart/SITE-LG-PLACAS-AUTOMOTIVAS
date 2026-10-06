@@ -10,7 +10,7 @@
 .card-produto { min-width: 0; display: flex; flex-direction: column; overflow: hidden; background: #fff; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 10px 25px rgba(15, 23, 42, .06); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
 .card-produto:hover { transform: translateY(-5px); border-color: #bfdbfe; box-shadow: 0 16px 32px rgba(15, 23, 42, .12); }
 .card-produto > img { width: 100%; height: 168px; display: block; object-fit: contain; padding: 15px 24px; background: linear-gradient(135deg, #eff6ff, #f8fafc); }
-.card-produto:nth-child(3) > img, .card-produto:nth-child(5) > img { object-fit: cover; padding: 0; }
+.card-produto:nth-child(5) > img { object-fit: cover; padding: 0; }
 .destaque-card > img { object-fit: contain; }
 .card-content { display: flex; flex: 1; flex-direction: column; padding: 22px; }
 .tag { align-self: flex-start; padding: 4px 9px; border-radius: 999px; color: #1d4ed8; background: #eff6ff; font-size: .72rem; font-weight: 800; }
